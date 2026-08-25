@@ -1,0 +1,13 @@
+{
+  "key": "rgb-split-hard",
+  "label": "RGB Split · Hard",
+  "category": "glitch",
+  "tags": ["glitch", "rgb", "split", "drop"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "rgbashift",
+  "params": [
+    { "key": "strength", "label": "Strength", "kind": "range", "default": 12, "min": 2, "max": 40 }
+  ],
+  "stability": "stable",
+  "description": "Hard chromatic separation. Fires well on beat drops."
+}

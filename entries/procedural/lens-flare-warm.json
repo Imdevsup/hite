@@ -1,0 +1,13 @@
+{
+  "key": "proc-lens-flare-warm",
+  "label": "Lens Flare · Warm",
+  "category": "procedural",
+  "tags": ["procedural", "lens-flare", "warm"],
+  "engine": "procedural",
+  "params": [
+    { "key": "temperature", "label": "Temperature (K)", "kind": "range", "default": 4500, "min": 2500, "max": 8000 },
+    { "key": "strength", "label": "Strength", "kind": "percent", "default": 0.4 }
+  ],
+  "stability": "experimental",
+  "description": "Shader-based lens flare. Temperature drives the hue."
+}

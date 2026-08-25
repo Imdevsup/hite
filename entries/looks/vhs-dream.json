@@ -1,0 +1,16 @@
+{
+  "key": "look-vhs-dream",
+  "label": "VHS Dream",
+  "category": "looks",
+  "tags": ["look", "vhs", "retro"],
+  "engine": "composed",
+  "description": "VHS tape approximation. LUT + chromatic drift + scanlines + soft saturation.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "lut-vhs-worn", "target": "all", "params": {} },
+    { "type": "applyEffect", "effectKey": "chromatic-aberration-drift", "target": "all", "params": { "strength": 2.5 } },
+    { "type": "applyOverlay", "overlayKey": "overlay-scan-lines", "placement": { "mode": "center" }, "params": { "opacity": 0.25 }, "startMs": 0, "endMs": "{{durationMs}}" },
+    { "type": "applyEffect", "effectKey": "audio-saturation-soft", "target": "all", "params": {} }
+  ],
+  "params": [],
+  "stability": "stable"
+}

@@ -1,0 +1,13 @@
+{
+  "key": "glitch-bars",
+  "label": "Glitch Bars",
+  "category": "glitch",
+  "tags": ["glitch", "bars", "digital"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "noise",
+  "params": [
+    { "key": "density", "label": "Density", "kind": "percent", "default": 0.4 }
+  ],
+  "stability": "stable",
+  "description": "Horizontal tearing bars — digital-artifact aesthetic."
+}

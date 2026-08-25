@@ -1,0 +1,15 @@
+{
+  "key": "look-cinema-warm",
+  "label": "Cinema · Warm",
+  "category": "looks",
+  "tags": ["look", "cinema", "warm", "kodachrome"],
+  "engine": "composed",
+  "description": "Kodachrome-ish warm cinema grade.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "lut-kodachrome-64", "target": "all", "params": {} },
+    { "type": "applyEffect", "effectKey": "contrast-cream", "target": "all", "params": { "amount": 1.12 } },
+    { "type": "applyEffect", "effectKey": "vignette-soft", "target": "all", "params": {} }
+  ],
+  "params": [],
+  "stability": "stable"
+}

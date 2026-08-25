@@ -1,0 +1,13 @@
+{
+  "key": "chromatic-aberration-drift",
+  "label": "Chromatic Aberration · Drift",
+  "category": "glitch",
+  "tags": ["glitch", "chromatic", "ambient"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "rgbashift",
+  "params": [
+    { "key": "strength", "label": "Strength", "kind": "range", "default": 3, "min": 1, "max": 8 }
+  ],
+  "stability": "stable",
+  "description": "Gentle always-on RGB drift. VHS-adjacent."
+}

@@ -1,0 +1,23 @@
+{
+  "key": "look-skull-face-drop",
+  "label": "Skull · Face · Drop",
+  "category": "looks",
+  "tags": ["look", "skull", "face-tracked", "drop", "hypebeast"],
+  "engine": "composed",
+  "description": "Face-tracked skull overlay stacked with RGB split + zoom punch + glitch bars + chromatic flash on the detected beat drop.",
+  "requires": ["beats", "faces"],
+  "recipe": [
+    { "type": "applyOverlay", "overlayKey": "overlay-skull", "startMs": "{{dropMs_minus_1600}}", "endMs": "{{dropMs_plus_1900}}", "placement": { "mode": "face", "trackFaceId": "{{faceId}}" }, "params": { "scale": "{{scale}}" } },
+    { "type": "applyEffect", "effectKey": "rgb-split-hard", "target": { "range": { "startMs": "{{dropMs_minus_300}}", "endMs": "{{dropMs_plus_300}}" } }, "params": { "strength": "{{splitStrength}}" } },
+    { "type": "applyEffect", "effectKey": "zoom-punch", "target": { "range": { "startMs": "{{dropMs_minus_100}}", "endMs": "{{dropMs_plus_100}}" } }, "params": { "amount": 1.15 } },
+    { "type": "applyEffect", "effectKey": "glitch-bars", "target": { "range": { "startMs": "{{dropMs_minus_100}}", "endMs": "{{dropMs_plus_400}}" } }, "params": { "density": 0.4 } },
+    { "type": "applyEffect", "effectKey": "chromatic-flash", "target": { "range": { "startMs": "{{dropMs}}", "endMs": "{{dropMs_plus_50}}" } }, "params": { "strength": 10 } }
+  ],
+  "params": [
+    { "key": "intensity", "label": "Intensity", "kind": "enum", "options": ["light", "medium", "hard"], "default": "medium" },
+    { "key": "faceId", "label": "Face ID", "kind": "text" },
+    { "key": "dropMs", "label": "Drop (ms)", "kind": "duration" },
+    { "key": "scale", "label": "Scale", "kind": "range", "default": 1.15 }
+  ],
+  "stability": "beta"
+}

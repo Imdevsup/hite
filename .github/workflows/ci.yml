@@ -1,0 +1,65 @@
+name: CI
+
+# Every push and every PR. The three gates below are the same ones CONTRIBUTING.md
+# asks you to run locally, in the same order, so a red CI means the same thing as a
+# red terminal.
+on:
+  push:
+  pull_request:
+
+# A force-push while CI is still chewing on the previous commit should not leave two
+# runs racing; the newer one wins.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: typecheck / lint / unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm before setup-node, deliberately: `cache: pnpm` below shells out to
+      # `pnpm store path`, which needs pnpm already on PATH.
+      #
+      # package.json has no `packageManager` field, so the version cannot be inferred
+      # and is pinned here. 10.18.0 is what the repo is developed against (README
+      # quickstart) and matches pnpm-lock.yaml's lockfileVersion 9.0. If you add
+      # `packageManager` to package.json, drop this `version` input rather than
+      # keeping two copies of the number.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.0
+
+      # package.json declares no `engines`. Next 16's floor is Node 20.9, but
+      # `pnpm worker` uses `node --env-file-if-exists`, so the project targets 22 LTS
+      # or newer and CI runs the same.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      # Scripts are NOT skipped: `pnpm.onlyBuiltDependencies` already narrows them to
+      # `ffmpeg-static`, whose postinstall fetches the binary the ffmpeg suites use.
+      # (The `supabase` CLI's postinstall stays blocked, which is fine: nothing here
+      # needs a database. See README quickstart step 2.)
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: pnpm typecheck
+        run: pnpm typecheck
+
+      # Includes the determinism guard over lib/edl, lib/render and lib/remotion.
+      - name: pnpm lint
+        run: pnpm lint
+
+      # Unit suites only. The eight files under tests/integration/ are collected but
+      # each is wrapped in `describe.skipIf(!ENABLED)` on SUPABASE_LOCAL_URL /
+      # _ANON_KEY / _SERVICE_KEY, so with no env set they skip without touching a
+      # network, a database, ffmpeg or Chromium. Running them here would mean standing
+      # up a full local Supabase stack plus a headless Chromium; that is a separate
+      # job someone can add when it earns its minutes.
+      - name: pnpm exec vitest run
+        run: pnpm exec vitest run

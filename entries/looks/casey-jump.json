@@ -1,0 +1,14 @@
+{
+  "key": "look-casey-jump",
+  "label": "Casey · Jump",
+  "category": "looks",
+  "tags": ["look", "vlog", "casey", "whip"],
+  "engine": "composed",
+  "description": "Casey Neistat edit grammar — whip-pan transitions, captioned lower-thirds, slightly saturated grade.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "saturation-up", "target": "all", "params": { "amount": 1.18 } },
+    { "type": "applyEffect", "effectKey": "contrast-cream", "target": "all", "params": { "amount": 1.08, "brightness": 0.015 } }
+  ],
+  "params": [],
+  "stability": "stable"
+}

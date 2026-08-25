@@ -1,0 +1,13 @@
+{
+  "key": "saturation-up",
+  "label": "Saturation Up",
+  "category": "color",
+  "tags": ["color", "saturation", "warm"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "eq",
+  "params": [
+    { "key": "amount", "label": "Amount", "kind": "range", "default": 1.2, "min": 1, "max": 2, "step": 0.05 }
+  ],
+  "stability": "stable",
+  "description": "Bumps global saturation. Default +20%."
+}

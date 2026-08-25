@@ -1,0 +1,13 @@
+{
+  "key": "lut-kodachrome-64",
+  "label": "Kodachrome 64",
+  "category": "luts",
+  "tags": ["lut", "film", "warm", "vintage"],
+  "engine": "lut",
+  "lutFile": "/luts/kodachrome-64.cube",
+  "params": [
+    { "key": "intensity", "label": "Intensity", "kind": "percent", "default": 1 }
+  ],
+  "stability": "stable",
+  "description": "Warm midtones, lifted blacks, saturated reds. The Kodachrome look."
+}

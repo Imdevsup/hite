@@ -1,0 +1,140 @@
+name: Bug report
+description: Something in HITE does not do what it says it does.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste an API key.** Not your model provider key, not
+        `SUPABASE_SERVICE_ROLE_KEY`, not an access token from a request in devtools. Redact them
+        before you paste a log, a header dump or a screenshot. If the bug itself is a security
+        problem, do not file it here at all: use a
+        [private security advisory](https://github.com/Imdevsup/hite/security/advisories/new)
+        instead, and see [SECURITY.md](https://github.com/Imdevsup/hite/blob/HEAD/SECURITY.md).
+
+        HITE is self-hosted, so almost everything we need to reproduce is about *your* setup.
+
+  - type: dropdown
+    id: flow
+    attributes:
+      label: Which flow?
+      description: Where in the pipeline it breaks. Pick the earliest stage that is already wrong.
+      options:
+        - Upload (browser to Supabase Storage)
+        - Analysis (probe, beats, scene cuts, transcription)
+        - Plan (prompt to edit commands, /api/plan or /api/refine)
+        - Preview (the timeline and the in-browser player)
+        - Export (render to MP4)
+        - Editor UI (something else in /app)
+        - Landing page or docs
+        - Setup, build or tooling (install, migrations, typecheck, lint, tests)
+        - Something else
+    validations:
+      required: true
+
+  - type: dropdown
+    id: worker
+    attributes:
+      label: Is `pnpm worker` running?
+      description: >-
+        It is a second process, and without it analysis and export jobs sit queued forever. This is
+        the single most common cause of "nothing happens after upload".
+      options:
+        - "Yes, in its own terminal, and it printed no fatal error"
+        - "Yes, and it printed an error (paste it below)"
+        - "No"
+        - "Not sure"
+        - "Not relevant to this bug"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what you expected instead
+      placeholder: |
+        I asked for "cut the dead air" on a 40s clip. The chat said it removed 6 segments, but the
+        timeline still has one clip and the exported file is identical to the source.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: >-
+        Include the prompt you typed, if there was one, and roughly what the source media is
+        (length, resolution, has audio or not). Do not upload footage you do not want public.
+      placeholder: |
+        1. pnpm dev + pnpm worker
+        2. Upload a 40s 1080p30 MP4 with speech
+        3. Wait for analysis to finish
+        4. Type "cut the dead air"
+    validations:
+      required: true
+
+  - type: input
+    id: provider
+    attributes:
+      label: Model provider and model
+      description: >-
+        Only for the plan/refine flow. The provider name and the model id, never the key. Every
+        provider currently ships `untested` (`public/providers/verified.json`), so which one you
+        used is genuinely part of the bug.
+      placeholder: "google / gemini-3-flash"
+
+  - type: dropdown
+    id: supabase
+    attributes:
+      label: Which Supabase are you pointed at?
+      options:
+        - "Local stack (pnpm supabase start, ports 5442x)"
+        - "Hosted project on supabase.com"
+        - "Not relevant to this bug"
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: OS, Node and pnpm
+      description: "`node --version` and `pnpm --version`. Say if you are in WSL, Docker or a VM."
+      placeholder: "Windows 11 / Node 22.14.0 / pnpm 10.18.0"
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or branch
+      description: "`git rev-parse --short HEAD`."
+      placeholder: "a1b2c3d on main"
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: "`pnpm typecheck` and `pnpm lint` output, if relevant"
+      description: >-
+        Paste these for any setup, build or tooling bug, and for anything where your tree may differ
+        from a clean checkout. Skip them for a pure runtime bug on an unmodified tree.
+      render: text
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: >-
+        Browser console, the `pnpm dev` terminal, and the `pnpm worker` terminal. Worker jobs record
+        the real underlying error in `job.error`, so that row is often the most useful thing here.
+        Redact keys and tokens.
+      render: text
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: There is no API key, service-role key or access token anywhere in this issue.
+          required: true
+        - label: I searched the existing issues.
+          required: true

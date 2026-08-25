@@ -1,0 +1,11 @@
+{
+  "key": "trans-cube-rotate-l",
+  "label": "Cube Rotate · Left",
+  "category": "transitions",
+  "tags": ["transition", "3d", "cube"],
+  "engine": "gl-transitions",
+  "params": [
+    { "key": "duration", "label": "Duration", "kind": "duration", "default": 600 }
+  ],
+  "stability": "stable"
+}

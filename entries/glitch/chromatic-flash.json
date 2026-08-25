@@ -1,0 +1,13 @@
+{
+  "key": "chromatic-flash",
+  "label": "Chromatic Flash",
+  "category": "glitch",
+  "tags": ["glitch", "flash", "beat"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "rgbashift",
+  "params": [
+    { "key": "strength", "label": "Strength", "kind": "range", "default": 8, "min": 2, "max": 20 }
+  ],
+  "stability": "stable",
+  "description": "Instantaneous chromatic flash — one-frame pop used at beat drops."
+}

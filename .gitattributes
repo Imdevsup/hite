@@ -1,0 +1,20 @@
+# Normalise line endings so a Windows contributor does not open a pull request whose diff is the
+# whole file. `core.autocrlf` is a per-machine setting and this repo had nothing overriding it.
+* text=auto eol=lf
+
+# Windows-only entry points must keep CRLF or cmd.exe mis-parses them.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary. Git's content heuristic already gets these right, but saying so removes the chance that a
+# committed sample take or a recorded demo is ever line-ending-normalised into a corrupt file.
+*.mp4 binary
+*.gif binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.cube binary

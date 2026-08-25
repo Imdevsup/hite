@@ -1,0 +1,1298 @@
+/*
+  components/landing3d/landing.css — the landing's own system (spec §9), scoped to #l3d.
+
+  The editor owns app/globals.css and its token names; this file never touches them. Everything
+  below is namespaced `l3d-` and the palette lives on #l3d, so the two can coexist on one property.
+
+  Two layouts share this sheet:
+    · static (default, no JS / no WebGL): every section in normal flow, nothing fixed.
+    · html[data-l3d="on"] (the scroll piece booted): a 980vh spacer, fixed L6 layers over the canvas.
+  Reduced motion never reaches the second layout: the island renders stills instead.
+*/
+
+#l3d {
+  --void: #04050a;
+  --surface: #0a0c14;
+  --surface-2: #12151f;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #f2f4f8;
+  --text-dim: #8a90a2;
+  --violet: #6e56f8;
+  --cyan: #22d3ee;
+  --amber: #f5a524;
+  --rose: #ff4d7d;
+  --mint: #34d399;
+  --sans: var(--l3d-font-sans), "Inter Tight", system-ui, sans-serif;
+  --mono: var(--l3d-font-mono), "JetBrains Mono", ui-monospace, monospace;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  isolation: isolate;
+}
+
+#l3d *,
+#l3d *::before,
+#l3d *::after {
+  box-sizing: border-box;
+}
+
+#l3d a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#l3d .l3d-wrap {
+  width: min(1240px, 100% - 2 * clamp(20px, 5vw, 64px));
+  margin-inline: auto;
+}
+
+/* ── Canvas: L1–L5 ─────────────────────────────────────────────────────────────────────────── */
+#l3d .l3d-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* ── Nav ───────────────────────────────────────────────────────────────────────────────────── */
+#l3d .l3d-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px clamp(20px, 4vw, 40px);
+  background: rgba(10, 12, 20, 0.55);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+  transform: translate3d(0, -110%, 0);
+  transition: transform 0.5s var(--ease-expo);
+}
+#l3d .l3d-nav[data-show="true"] {
+  transform: translate3d(0, 0, 0);
+}
+#l3d .l3d-nav:focus-within {
+  transform: translate3d(0, 0, 0);
+}
+#l3d .l3d-logo {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+/* THE MARK, not a stand-in. This was a gradient dot — a placeholder that shipped to the nav, the
+   footer and the docs header. `KiteMark` is the real signature (public/kite.svg): diamond, spine,
+   crossbar, tail. The glow stays, on the mark itself rather than on a circle behind it. */
+#l3d .l3d-logo svg {
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  filter: drop-shadow(0 0 10px rgba(111, 231, 214, 0.45));
+}
+#l3d .l3d-nav-links {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+#l3d .l3d-nav-links a:hover,
+#l3d .l3d-nav-links a:focus-visible {
+  color: var(--text);
+}
+@media (max-width: 699px) {
+  #l3d .l3d-nav-links {
+    display: none;
+  }
+}
+
+#l3d .l3d-skip {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 60;
+  padding: 10px 14px;
+  background: var(--text);
+  color: var(--void);
+  border-radius: 8px;
+  font-weight: 600;
+}
+#l3d .l3d-skip:focus {
+  top: 16px;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────────────────────── */
+#l3d .l3d-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  transition: transform 0.35s var(--ease-out), background 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+}
+#l3d .l3d-btn:hover,
+#l3d .l3d-btn:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+#l3d .l3d-btn-primary {
+  background: var(--violet);
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(110, 86, 248, 0.4), 0 12px 40px -12px rgba(110, 86, 248, 0.8);
+}
+#l3d .l3d-btn-primary:hover,
+#l3d .l3d-btn-primary:focus-visible {
+  background: #7e68ff;
+}
+#l3d .l3d-btn-sm {
+  height: 36px;
+  padding: 0 14px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+#l3d :focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+/* ── The 3D range ──────────────────────────────────────────────────────────────────────────── */
+#l3d .l3d-scroll {
+  position: relative;
+  z-index: 2;
+}
+html[data-l3d="on"] #l3d .l3d-scroll {
+  /* The whole piece maps to this height; every beat is a fraction of it. 1700vh gives each act
+     room to be read — at 980vh too much happened per wheel tick. */
+  height: 1700vh;
+}
+
+/* Hero copy: static by default, fixed L6 once the piece is live. */
+#l3d .l3d-hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: 12vh;
+  pointer-events: none;
+}
+#l3d .l3d-hero > * {
+  pointer-events: auto;
+}
+html[data-l3d="on"] #l3d .l3d-hero {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  min-height: 0;
+  padding-top: 0;
+  will-change: transform, opacity, filter;
+}
+#l3d .l3d-hero-inner {
+  width: min(1240px, 100% - 2 * clamp(20px, 5vw, 64px));
+  margin-inline: auto;
+}
+#l3d .l3d-h1 {
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+#l3d .l3d-lede {
+  margin: 22px 0 0;
+  max-width: 40ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+#l3d .l3d-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+#l3d .l3d-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: none;
+}
+html[data-l3d="on"] #l3d .l3d-hint {
+  display: block;
+}
+#l3d .l3d-hint::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 36px;
+  margin: 10px auto 0;
+  background: linear-gradient(var(--text-dim), transparent);
+  animation: l3d-hint 1.8s var(--ease-inout) infinite;
+}
+@keyframes l3d-hint {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+#l3d .l3d-demo-note {
+  margin-top: 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  opacity: 0.8;
+}
+
+/* Eyebrow over the flat timeline. */
+#l3d .l3d-eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 clamp(20px, 5vw, 64px);
+}
+html[data-l3d="on"] #l3d .l3d-eyebrow {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 18vh;
+  z-index: 3;
+  text-align: center;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Subtitles: a cinematic caption band. Body copy when static. */
+#l3d .l3d-subtitles {
+  margin: 48px 0 0;
+  padding: 0 clamp(20px, 5vw, 64px);
+  display: grid;
+  gap: 10px;
+}
+#l3d .l3d-sub,
+#l3d .l3d-subtitles p {
+  margin: 0;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  color: var(--text);
+}
+html[data-l3d="on"] #l3d .l3d-subtitles {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 9vh;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  display: block;
+  text-align: center;
+}
+html[data-l3d="on"] #l3d .l3d-sub {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(4, 5, 10, 0.55), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+html[data-l3d="on"] #l3d .l3d-sub[data-on="true"] {
+  opacity: 1;
+}
+html[data-l3d="on"] #l3d .l3d-sub span {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(6px);
+  transition: opacity 0.45s var(--ease-out), filter 0.45s var(--ease-out), transform 0.45s var(--ease-out);
+  transition-delay: calc(var(--w) * 70ms);
+}
+html[data-l3d="on"] #l3d .l3d-sub[data-on="true"] span {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+html[data-l3d="on"] #l3d .l3d-sub[data-on="false"] span {
+  transition-delay: 0ms;
+  transition-duration: 0.3s;
+}
+
+/* HUD, readouts, badge, flash: exist only while the piece runs. */
+#l3d .l3d-hud,
+#l3d .l3d-timecode,
+#l3d .l3d-headers,
+#l3d .l3d-badge,
+#l3d .l3d-flash {
+  display: none;
+}
+html[data-l3d="on"] #l3d .l3d-hud {
+  display: grid;
+  position: fixed;
+  top: 84px;
+  right: clamp(20px, 4vw, 40px);
+  z-index: 3;
+  gap: 4px;
+  text-align: right;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: plus-lighter;
+}
+html[data-l3d="on"] #l3d .l3d-hud b {
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+html[data-l3d="on"] #l3d .l3d-hud em {
+  font-style: normal;
+  color: var(--amber);
+  min-height: 1.2em;
+}
+html[data-l3d="on"] #l3d .l3d-timecode {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  background: rgba(10, 12, 20, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 3px 7px;
+  pointer-events: none;
+  white-space: nowrap;
+  will-change: transform;
+}
+html[data-l3d="on"] #l3d .l3d-headers {
+  display: block;
+  position: fixed;
+  left: clamp(14px, 2vw, 28px);
+  top: 0;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  pointer-events: none;
+}
+html[data-l3d="on"] #l3d .l3d-headers span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.35;
+  white-space: nowrap;
+  will-change: transform;
+}
+html[data-l3d="on"] #l3d .l3d-headers span::before,
+html[data-l3d="on"] #l3d .l3d-headers span::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  opacity: 0.6;
+}
+html[data-l3d="on"] #l3d .l3d-headers span::after {
+  border-radius: 50%;
+}
+html[data-l3d="on"] #l3d .l3d-headers[data-v2="true"] [data-lane="v2"],
+html[data-l3d="on"] #l3d .l3d-headers [data-lane="v1"],
+html[data-l3d="on"] #l3d .l3d-headers[data-a1="true"] [data-lane="a1"],
+html[data-l3d="on"] #l3d .l3d-headers[data-a2="true"] [data-lane="a2"] {
+  opacity: 1;
+}
+html[data-l3d="on"] #l3d .l3d-badge {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--void);
+  background: var(--cyan);
+  border-radius: 6px;
+  padding: 3px 8px;
+  pointer-events: none;
+  opacity: 0;
+}
+html[data-l3d="on"] #l3d .l3d-flash {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: plus-lighter;
+}
+
+/* The Act 5 CTA over the composed frame. Static: a normal block. */
+#l3d .l3d-final {
+  padding: 40px clamp(20px, 5vw, 64px) 0;
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+}
+html[data-l3d="on"] #l3d .l3d-final {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 18vh;
+  z-index: 3;
+  justify-items: center;
+  text-align: center;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+#l3d .l3d-final h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2.4vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  max-width: 28ch;
+  text-wrap: balance;
+  line-height: 1.15;
+}
+#l3d .l3d-final .l3d-stat {
+  font-family: var(--mono);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  color: var(--mint);
+  letter-spacing: 0.04em;
+}
+
+/* Stills (reduced motion). */
+#l3d .l3d-stills {
+  display: grid;
+  gap: 40px;
+  padding: 40px clamp(20px, 5vw, 64px) 0;
+}
+#l3d .l3d-still {
+  margin: 0;
+  opacity: 0.35;
+  transition: opacity 0.6s var(--ease-out);
+}
+#l3d .l3d-still[data-in] {
+  opacity: 1;
+}
+#l3d .l3d-still img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+#l3d .l3d-still figcaption {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ── Marketing sections ────────────────────────────────────────────────────────────────────── */
+#l3d .l3d-marketing {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(var(--void) 0%, var(--surface) 100%);
+  padding: clamp(80px, 12vw, 160px) 0 0;
+}
+#l3d .l3d-section {
+  padding: clamp(56px, 8vw, 120px) 0;
+}
+#l3d .l3d-kicker {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 18px;
+}
+#l3d .l3d-h2 {
+  font-size: clamp(1.9rem, 4vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+#l3d .l3d-lede-sm {
+  margin: 18px 0 0;
+  color: var(--text-dim);
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.5;
+  max-width: 42ch;
+}
+
+#l3d .l3d-section-head {
+  max-width: 64ch;
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+#l3d .l3d-section-line {
+  border-top: 1px solid var(--line);
+}
+
+/* How it works: three steps, each with a small HTML mock on top. */
+#l3d .l3d-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 899px) {
+  #l3d .l3d-steps {
+    grid-template-columns: 1fr;
+  }
+}
+#l3d .l3d-step {
+  position: relative;
+  padding: 20px 22px 26px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01));
+}
+#l3d .l3d-step-n {
+  display: block;
+  margin-top: 22px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+}
+#l3d .l3d-step h3 {
+  margin: 10px 0 0;
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+#l3d .l3d-step p {
+  margin: 10px 0 0;
+  color: var(--text-dim);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+#l3d .l3d-mock {
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 16px;
+  min-height: 168px;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+#l3d .l3d-mock-cmds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#l3d .l3d-mock-cmds span {
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+#l3d .l3d-mock-bar {
+  display: flex;
+  gap: 3px;
+  height: 26px;
+}
+#l3d .l3d-mock-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  opacity: 0.85;
+}
+#l3d .l3d-mock-bar i:nth-child(2) {
+  opacity: 0.35;
+}
+#l3d .l3d-mock-index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+#l3d .l3d-mock-index li {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-dim);
+}
+#l3d .l3d-mock-index b {
+  font-weight: 500;
+  color: var(--text);
+}
+#l3d .l3d-mock-trace {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+}
+#l3d .l3d-mock-trace li {
+  display: grid;
+  grid-template-columns: 6px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+}
+#l3d .l3d-mock-trace i {
+  width: 6px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--violet);
+}
+#l3d .l3d-mock-trace i[data-kind="analysis"] {
+  background: var(--cyan);
+}
+#l3d .l3d-mock-trace i[data-kind="edit"] {
+  background: var(--rose);
+}
+#l3d .l3d-mock-trace code {
+  font-family: inherit;
+  color: var(--text);
+}
+#l3d .l3d-mock-trace em {
+  font-style: normal;
+  color: var(--mint);
+}
+
+/* Under the hood: the spine as a figure. Two doors on the left feed one chain of five nodes; two
+   outputs leave the last. Connectors are drawn with gradients, the chain is a grid, the whole
+   thing is HTML. */
+#l3d .l3d-pipe {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0 18px;
+  align-items: center;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(90% 120% at 0% 50%, rgba(110, 86, 248, 0.14), transparent 55%),
+    radial-gradient(70% 120% at 100% 50%, rgba(34, 211, 238, 0.1), transparent 55%),
+    var(--surface);
+  overflow: hidden;
+}
+#l3d .l3d-pipe-doors,
+#l3d .l3d-pipe-outs {
+  display: grid;
+  gap: 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+#l3d .l3d-pipe-doors span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#l3d .l3d-pipe-doors i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 14px rgba(110, 86, 248, 0.8);
+}
+#l3d .l3d-pipe-doors span:last-child i {
+  background: var(--cyan);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.8);
+}
+#l3d .l3d-pipe-outs span {
+  position: relative;
+  padding-left: 22px;
+}
+#l3d .l3d-pipe-outs span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 14px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+}
+#l3d .l3d-pipe-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  position: relative;
+}
+#l3d .l3d-pipe-nodes::before {
+  /* The wire the nodes hang on. */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  opacity: 0.7;
+}
+#l3d .l3d-pipe-node {
+  position: relative;
+  padding: 52px 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(10, 12, 20, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+#l3d .l3d-pipe-node::before {
+  /* The node's bead on the wire. */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 4px rgba(110, 86, 248, calc(0.35 - var(--i) * 0.05)), 0 0 18px rgba(110, 86, 248, 0.5);
+}
+#l3d .l3d-pipe-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+#l3d .l3d-pipe-code {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+}
+#l3d .l3d-pipe-node p {
+  margin: 10px 0 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+@media (max-width: 1099px) {
+  #l3d .l3d-pipe {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  #l3d .l3d-pipe-doors,
+  #l3d .l3d-pipe-outs {
+    grid-auto-flow: column;
+    justify-content: start;
+  }
+  #l3d .l3d-pipe-nodes {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  #l3d .l3d-pipe-nodes::before {
+    left: 24px;
+    right: auto;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(180deg, var(--violet), var(--cyan));
+  }
+  #l3d .l3d-pipe-node {
+    padding: 14px 16px 14px 48px;
+  }
+  #l3d .l3d-pipe-node::before {
+    left: 24px;
+    top: 18px;
+  }
+}
+
+/* The facts: six numbers, set like a spec sheet. */
+#l3d .l3d-facts {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 1099px) {
+  #l3d .l3d-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 599px) {
+  #l3d .l3d-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+#l3d .l3d-fact {
+  padding: 18px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
+#l3d .l3d-fact b {
+  display: block;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--text), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#l3d .l3d-fact span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+#l3d .l3d-hero-kicker {
+  margin-bottom: 18px;
+  color: var(--cyan);
+}
+
+/* FAQ: native disclosure, styled. */
+#l3d .l3d-faq-list {
+  border-top: 1px solid var(--line);
+}
+#l3d .l3d-faq-item {
+  border-bottom: 1px solid var(--line);
+}
+#l3d .l3d-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 0;
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+#l3d .l3d-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+#l3d .l3d-faq-item summary i {
+  position: relative;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+#l3d .l3d-faq-item summary i::before,
+#l3d .l3d-faq-item summary i::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 1.5px;
+  background: var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.35s var(--ease-out);
+}
+#l3d .l3d-faq-item summary i::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+#l3d .l3d-faq-item[open] summary i::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+#l3d .l3d-faq-item p {
+  margin: 0;
+  padding: 0 0 24px;
+  color: var(--text-dim);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 72ch;
+}
+/* The close: a quiet, full-height band with a single soft light. */
+#l3d .l3d-close {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  padding: clamp(96px, 14vw, 200px) 0;
+  min-height: 70svh;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(60% 80% at 80% 50%, rgba(110, 86, 248, 0.16), transparent 70%), var(--surface);
+}
+#l3d .l3d-close-inner {
+  position: relative;
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+}
+#l3d .l3d-close .l3d-h1 {
+  max-width: 12ch;
+}
+
+/* Footer: brand + three link columns, small print. */
+#l3d .l3d-footer {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: clamp(48px, 6vw, 80px) 0 32px;
+}
+#l3d .l3d-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 56px);
+}
+@media (max-width: 899px) {
+  #l3d .l3d-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  #l3d .l3d-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+#l3d .l3d-footer-brand .l3d-footer-tagline {
+  margin: 14px 0 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+#l3d .l3d-footer-brand p {
+  margin: 16px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+  max-width: 38ch;
+}
+#l3d .l3d-footer-brand p a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#l3d .l3d-footer h3 {
+  margin: 0 0 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+#l3d .l3d-footer ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+#l3d .l3d-footer li a {
+  font-size: 0.95rem;
+  color: var(--text);
+  opacity: 0.82;
+}
+#l3d .l3d-footer li a:hover,
+#l3d .l3d-footer li a:focus-visible {
+  opacity: 1;
+}
+#l3d .l3d-footer-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+#l3d .l3d-footer-line a:hover {
+  color: var(--text);
+}
+
+/* Scroll-in reveals (app/_landing/Reveal.tsx). Hidden only once JS has booted; static without it,
+   and the global reduced-motion kill switch removes the transition. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-l3d-mode] #l3d .l3d-reveal {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+    transition: opacity 0.9s var(--ease-expo), transform 0.9s var(--ease-expo);
+  }
+  html[data-l3d-mode] #l3d .l3d-reveal[data-in="true"] {
+    opacity: 1;
+    transform: none;
+  }
+  html[data-l3d-mode] #l3d .l3d-row.l3d-reveal:nth-child(2) {
+    transition-delay: 0.08s;
+  }
+  html[data-l3d-mode] #l3d .l3d-row.l3d-reveal:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+}
+
+/* Debug harness. */
+#l3d-debug {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 100;
+  font: 11px/1.5 ui-monospace, monospace;
+  color: #9fa7bc;
+  background: rgba(6, 7, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+  pointer-events: auto;
+}
+#l3d-debug pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre;
+}
+#l3d-debug .l3d-debug-toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+}
+#l3d-debug p {
+  margin: 0;
+}
+
+/* The editor's global reduced-motion kill switch already zeroes transitions; nothing else to do. */
+
+/* ── The film section (app/page.tsx #film) ───────────────────────────────────────────────────────
+   No frame. The film is already letterboxed and already carries its own edge, and a border plus a
+   drop shadow around it just drew a picture of a video player around a video. It plays itself when
+   it scrolls in (FilmPlayer), so there is no play button on top of the picture either — the one
+   control is the sound toggle, which sits under the frame rather than over it. */
+#film .l3d-film {
+  margin: clamp(28px, 4vw, 48px) 0 0;
+  padding: 0;
+}
+#film .l3d-film-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+#film .l3d-film-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #08080a;
+}
+#film .l3d-film-sound {
+  position: absolute;
+  right: 0;
+  bottom: -34px;
+  padding: 4px 10px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--t-4, rgba(255, 255, 255, 0.4));
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+#film .l3d-film-sound:hover,
+#film .l3d-film-sound:focus-visible {
+  color: var(--t-2, rgba(255, 255, 255, 0.8));
+}
+#film .l3d-film-cap {
+  max-width: 1060px;
+  margin: 46px auto 0;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--t-3, rgba(255, 255, 255, 0.55));
+}
+
+/* ── Go deeper (app/page.tsx #deeper) ──────────────────────────────────────────────────────────
+   Two columns on a wide screen: the argument on the left, the signatures it is describing on the
+   right. Stacks below 900px, where a code block beside body copy is two unreadable columns. */
+#deeper .l3d-deeper-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+#deeper .l3d-deeper-copy .l3d-h2 {
+  margin-top: 10px;
+}
+#deeper .l3d-deeper-copy .l3d-lede-sm {
+  margin-top: 18px;
+}
+#deeper .l3d-deeper-note {
+  margin: 26px 0 22px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--t-2, rgba(255, 255, 255, 0.78));
+}
+#deeper .l3d-deeper-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 12px);
+}
+
+#deeper .l3d-spec {
+  margin: 0;
+  border-radius: var(--r-md, 10px);
+  background: rgba(10, 12, 20, 0.62);
+  box-shadow: inset 0 0 0 1px var(--line-3, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+}
+#deeper .l3d-spec-bar {
+  display: flex;
+  gap: 18px;
+  padding: 10px 18px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--t-4, rgba(255, 255, 255, 0.38));
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 -1px 0 var(--line-3, rgba(255, 255, 255, 0.08));
+}
+#deeper .l3d-spec-sigs {
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  counter-reset: sig;
+}
+#deeper .l3d-spec-sigs li {
+  padding: 14px 18px;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+#deeper .l3d-spec-sigs li:last-child {
+  box-shadow: none;
+}
+#deeper .l3d-spec-sigs code {
+  display: block;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--t-3, rgba(255, 255, 255, 0.55));
+  overflow-wrap: anywhere;
+}
+#deeper .l3d-spec-sigs code b {
+  font-weight: 600;
+  color: #6fe7d6;
+}
+#deeper .l3d-spec-sigs code em {
+  font-style: normal;
+  color: var(--t-2, rgba(255, 255, 255, 0.78));
+}
+#deeper .l3d-spec-sigs p {
+  margin: 7px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--t-4, rgba(255, 255, 255, 0.42));
+}
+#deeper .l3d-spec-consts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 1px 0 var(--line-3, rgba(255, 255, 255, 0.08));
+}
+#deeper .l3d-spec-consts > div {
+  padding: 14px 10px;
+  text-align: center;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
+}
+#deeper .l3d-spec-consts > div:last-child {
+  box-shadow: none;
+}
+#deeper .l3d-spec-consts dt {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 17px;
+  color: var(--t-1, rgba(255, 255, 255, 0.96));
+}
+#deeper .l3d-spec-consts dd {
+  margin: 5px 0 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--t-4, rgba(255, 255, 255, 0.38));
+}
+
+@media (max-width: 900px) {
+  #deeper .l3d-deeper-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #deeper .l3d-spec-consts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

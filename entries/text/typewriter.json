@@ -1,0 +1,13 @@
+{
+  "key": "text-typewriter",
+  "label": "Typewriter",
+  "category": "text",
+  "tags": ["text", "typewriter", "reveal"],
+  "engine": "remotion",
+  "component": "Typewriter",
+  "params": [
+    { "key": "text", "label": "Text", "kind": "text", "default": "Hello." },
+    { "key": "speed", "label": "Chars/sec", "kind": "range", "default": 18, "min": 4, "max": 40 }
+  ],
+  "stability": "stable"
+}

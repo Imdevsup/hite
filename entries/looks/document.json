@@ -1,0 +1,13 @@
+{
+  "key": "look-document",
+  "label": "Document",
+  "category": "looks",
+  "tags": ["look", "documentary", "neutral"],
+  "engine": "composed",
+  "description": "Neutral documentary grade — soft contrast, subtle grain, no stylization.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "grain-fine-medium", "target": "all", "params": { "strength": 6 } }
+  ],
+  "params": [],
+  "stability": "stable"
+}

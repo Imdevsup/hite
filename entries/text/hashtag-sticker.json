@@ -1,0 +1,12 @@
+{
+  "key": "text-hashtag-sticker",
+  "label": "Hashtag Sticker",
+  "category": "text",
+  "tags": ["text", "hashtag", "social"],
+  "engine": "remotion",
+  "component": "HashtagSticker",
+  "params": [
+    { "key": "tag", "label": "Tag", "kind": "text", "default": "#hite" }
+  ],
+  "stability": "stable"
+}

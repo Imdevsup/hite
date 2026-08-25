@@ -1,0 +1,5 @@
+{
+  "note": "ART-DIRECTION §16: landing client JS is budgeted as this measured baseline + 12KB gz. Raising this number is a deliberate, reviewable decision — never a fix for a failing gate.",
+  "landingClientJsGzBytes": 138012,
+  "measuredAt": "2026-08-20"
+}

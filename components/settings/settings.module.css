@@ -1,0 +1,509 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   THE SETTINGS SURFACE — ART-DIRECTION §14.
+
+   WHY A CSS MODULE. Every value below resolves through a token declared in
+   app/globals.css, which this unit does not own and must not touch. A module is
+   the only way to author real CSS — media queries, keyframes, pseudo-elements —
+   without minting global class names next to a system that already has 141
+   editor call sites on --color-line* alone. Nothing here declares a colour, a
+   duration or an easing of its own; it only spends the ones that exist.
+
+   THE RULES THIS FILE IS HELD TO:
+     · §16  every motion rule is authored INSIDE
+            @media (prefers-reduced-motion: no-preference). There is no
+            "reduce" override anywhere, because there is nothing to override.
+     · §5   12px is a hard floor. There is no font-size below var(--fs-label).
+     · §4.1 --line-5 is the ONLY rung allowed to be a control's sole boundary.
+            The key field is the one exception the system already sanctions —
+            "an input is always paired with a ≥4.5:1 visible label" — so it
+            rests on --line-3 and carries a real <label>.
+     · LAW 1 every raised surface takes --specular, top edge only.
+     · LAW 2 every shadow is rgb(var(--ground) / α), never pure black.
+     · §16  every target is at least var(--tap).
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── THE PLANE ─────────────────────────────────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--s-scrim);
+}
+
+/* §14: "520px, right, plane above the editor, --s-panel."
+   The section also asks for a "warm top specular". LAW 1 fixes every raised
+   surface at rgb(255 255 255 / .14) with no exceptions, and §4.1 gives warm to
+   the footage and to no chrome — globals.css already made this exact call for
+   the CTA ("a control that is the one exception to the property's own material
+   law is not a control, it is a sticker"). The law wins; the specular is white. */
+.sheet {
+  position: relative;
+  inline-size: min(520px, 100vw);
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--s-panel);
+  border-inline-start: 1px solid var(--line-2);
+  box-shadow: var(--shadow-lg);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-block-size: var(--topbar-h);
+  padding-inline: var(--space-5);
+  border-block-end: 1px solid var(--line-2);
+}
+
+.title {
+  font-family: var(--font-sans), "Instrument Sans", system-ui, sans-serif;
+  font-variation-settings: "wght" 500, "wdth" 92;
+  font-weight: 500;
+  font-size: var(--fs-lead);
+  letter-spacing: var(--tk-lead);
+  color: var(--t-1);
+}
+
+.close {
+  inline-size: var(--tap);
+  block-size: var(--tap);
+  display: grid;
+  place-items: center;
+  margin-inline-end: calc(var(--space-3) * -1);
+  color: var(--t-2);
+  border-radius: var(--r-sm);
+}
+
+@media (any-hover: hover) {
+  .close:hover { color: var(--t-1); background: var(--s-2); }
+}
+
+.body {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-6) var(--space-5) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+/* ── SECTIONS ──────────────────────────────────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  font-family: var(--font-sans), "Instrument Sans", system-ui, sans-serif;
+  font-variation-settings: "wght" 500, "wdth" 92;
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tk-body);
+  color: var(--t-1);
+}
+
+/* The disclosure. --t-2 is 9.73:1; this is the one paragraph on the surface that
+   may not be softened, shortened or paraphrased, so it gets the full measure. */
+.prose {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+  max-inline-size: var(--measure-lead);
+  text-wrap: pretty;
+}
+
+.note {
+  font-size: var(--fs-label);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tk-body);
+  color: var(--t-3);
+  max-inline-size: var(--measure-caption);
+  text-wrap: pretty;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+  border-radius: var(--r-xs);
+  text-underline-offset: 3px;
+}
+
+@media (any-hover: hover) {
+  .link:hover { color: var(--color-accent); text-decoration: underline; }
+}
+
+.link:focus-visible { color: var(--color-accent); text-decoration: underline; }
+
+/* ── THE KEY ───────────────────────────────────────────────────────────────── */
+
+.fieldLabel {
+  display: block;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-body);
+  color: var(--t-3);
+  margin-block-end: var(--space-2);
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* The ring IS the status (§14.1). Four rings, one field geometry. */
+.field {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: var(--tap);
+  padding-inline: var(--space-4);
+  border-radius: var(--r-sm);
+  background: var(--color-bg-2);
+  box-shadow: inset 0 0 0 1px var(--line-3);
+}
+
+.field[data-ring="live"] { box-shadow: inset 0 0 0 1px var(--color-accent); }
+.field[data-ring="hit"] { box-shadow: inset 0 0 0 1px var(--color-hit); }
+
+.input {
+  flex: 1;
+  min-inline-size: 0;
+  block-size: var(--tap);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tk-body);
+  color: var(--t-1);
+}
+
+.input::placeholder {
+  color: var(--t-4);
+  opacity: 1;
+}
+
+/* §14.1 correction 1: the display is `fingerprintKey`, eight hex, mono — never a
+   "last 4 characters" chip, which is the one display lib/ai/keys.ts rules out by
+   name because it echoes key material. */
+.fingerprint {
+  flex: 1;
+  min-inline-size: 0;
+  font-family: var(--font-mono), "Martian Mono", ui-monospace, monospace;
+  font-variation-settings: "wght" 400, "wdth" 87.5;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  color: var(--t-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verdict {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+  white-space: nowrap;
+}
+
+.verdict[data-tone="hit"] { color: var(--color-hit); }
+
+/* §14.1: the tick draws in 240 ms. Outside motion-safe it is simply already
+   drawn — the resting state is the finished mark, never a frozen half-tick. */
+.tick {
+  display: block;
+  overflow: visible;
+  stroke-dasharray: 18;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tick { animation: draw-tick 240ms var(--ease-out) both; }
+  @keyframes draw-tick {
+    from { stroke-dashoffset: 18; }
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* Secondary controls. --line-5 is the only rung that may be a control's sole
+   boundary (3.22:1, WCAG 1.4.11), so every ghost button rests on exactly it. */
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--tap);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--line-5);
+  border-radius: var(--r-sm);
+  background: transparent;
+  font-family: var(--font-sans), "Instrument Sans", system-ui, sans-serif;
+  font-variation-settings: "wght" 500, "wdth" 92;
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tk-body);
+  color: var(--t-1);
+  white-space: nowrap;
+}
+
+.ghost:disabled {
+  color: var(--t-4);
+  border-color: var(--line-3);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ghost { transition: background var(--dur-fast) var(--ease-apple), color var(--dur-fast) var(--ease-apple); }
+}
+
+@media (any-hover: hover) {
+  .ghost:not(:disabled):hover { background: var(--s-2); }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ── EFFORT ────────────────────────────────────────────────────────────────── */
+
+/* §14.2: "Four ticks on one 320px track". Four var(--tap)-tall rungs at 80px
+   each is exactly 320, so the track is the sum of four legal targets rather than
+   a decorative rail with hit areas laid over it. */
+.track {
+  display: grid;
+  grid-template-columns: repeat(var(--rungs, 4), minmax(0, 80px));
+  max-inline-size: 320px;
+  border-radius: var(--r-sm);
+}
+
+.rung {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  min-block-size: var(--tap);
+  padding-block: var(--space-2);
+  border-radius: var(--r-xs);
+  font-family: var(--font-mono), "Martian Mono", ui-monospace, monospace;
+  font-variation-settings: "wght" 500, "wdth" 87.5;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-mono);
+  color: var(--t-3);
+}
+
+.rung[aria-checked="true"] { color: var(--t-1); }
+
+/* §14.2: the rungs above the ceiling render struck through. --t-4 is 4.54:1 and
+   is permitted at ≥12px on --s-panel, which is the surface it sits on. */
+.rung[aria-disabled="true"] {
+  color: var(--t-4);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+@media (any-hover: hover) {
+  .rung:not([aria-disabled="true"]):hover { color: var(--t-1); }
+}
+
+/* The tick mark itself: a 2px stop on a 1px rail. */
+.rungTick {
+  inline-size: 100%;
+  block-size: 2px;
+  background: var(--line-4);
+  border-radius: 1px;
+}
+
+.rung[aria-checked="true"] .rungTick { background: var(--color-accent); block-size: 3px; }
+.rung[aria-disabled="true"] .rungTick { background: var(--line-3); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rungTick { transition: background var(--dur-base) var(--ease-apple); }
+  .rung { transition: color var(--dur-base) var(--ease-apple); }
+}
+
+/* The three bars. Unselected columns take --line-5 (3.22:1) rather than a
+   decoration rung, because a bar carries information and 1.4.11 applies to it. */
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.barRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+}
+
+.barLabel {
+  inline-size: 108px;
+  flex: none;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-body);
+  color: var(--t-3);
+  line-height: 1;
+  padding-block-end: 2px;
+}
+
+.barTrack {
+  display: grid;
+  grid-template-columns: repeat(var(--rungs, 4), minmax(0, 80px));
+  align-items: flex-end;
+  max-inline-size: 320px;
+  block-size: 20px;
+}
+
+.barCell {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar {
+  inline-size: 14px;
+  background: var(--line-5);
+  border-radius: 1px;
+}
+
+.bar[data-on="true"] { background: var(--color-accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .bar { transition: background var(--dur-base) var(--ease-apple), block-size var(--dur-base) var(--ease-apple); }
+}
+
+/* The three-line story + the ledger. */
+.story {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.storyLine {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+  max-inline-size: var(--measure-lead);
+  text-wrap: pretty;
+}
+
+.ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line-2);
+}
+
+.ledgerRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.ledgerLabel {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-body);
+  color: var(--t-3);
+  margin: 0;
+}
+
+.ledgerValue {
+  font-family: var(--font-mono), "Martian Mono", ui-monospace, monospace;
+  font-variation-settings: "wght" 400, "wdth" 87.5;
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-mono);
+  font-variant-numeric: tabular-nums slashed-zero;
+  color: var(--t-1);
+  margin: 0;
+}
+
+/* ── WHAT LEAVES THIS BROWSER ──────────────────────────────────────────────── */
+
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flowRow {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: baseline;
+}
+
+.flowWhat {
+  font-size: var(--fs-label);
+  letter-spacing: var(--tk-body);
+  color: var(--t-3);
+}
+
+.flowWhere {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+}
+
+/* ── PENDING / UNAVAILABLE ─────────────────────────────────────────────────── */
+
+.pending {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-block-size: 120px;
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tk-body);
+  color: var(--t-2);
+}
+
+/* ── NARROW ────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 560px) {
+  .track,
+  .barTrack {
+    grid-template-columns: repeat(var(--rungs, 4), minmax(0, 1fr));
+    max-inline-size: none;
+  }
+  .barRow { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+  .barLabel { inline-size: auto; }
+  .flowRow { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+}

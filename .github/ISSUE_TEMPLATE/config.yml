@@ -1,0 +1,13 @@
+# Both forms above ask for things a free-text issue almost never includes (which flow, whether the
+# worker is running, which provider), so blank issues are off.
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Imdevsup/hite/security/advisories/new
+    about: Report privately here instead. Never in a public issue.
+  - name: Setup is not working
+    url: https://github.com/Imdevsup/hite/blob/HEAD/README.md#quickstart
+    about: The quickstart covers the two traps that bite everyone, the missing supabase CLI binary and the non-default local ports.
+  - name: How the layers fit together
+    url: https://github.com/Imdevsup/hite/blob/HEAD/docs/ARCHITECTURE.md
+    about: Read this before proposing a change to the edit pipeline.

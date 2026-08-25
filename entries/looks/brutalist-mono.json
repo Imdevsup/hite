@@ -1,0 +1,14 @@
+{
+  "key": "look-brutalist-mono",
+  "label": "Brutalist · Mono",
+  "category": "looks",
+  "tags": ["look", "bw", "brutalist", "high-contrast"],
+  "engine": "composed",
+  "description": "Monochrome with crushed blacks and a hairline-hard frame.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "saturation-down", "target": "all", "params": { "amount": 0 } },
+    { "type": "applyEffect", "effectKey": "contrast-cream", "target": "all", "params": { "amount": 1.35, "brightness": -0.08 } }
+  ],
+  "params": [],
+  "stability": "stable"
+}

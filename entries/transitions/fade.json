@@ -1,0 +1,12 @@
+{
+  "key": "trans-fade",
+  "label": "Fade",
+  "category": "transitions",
+  "tags": ["transition", "fade", "classic"],
+  "engine": "gl-transitions",
+  "params": [
+    { "key": "duration", "label": "Duration", "kind": "duration", "default": 400, "min": 100, "max": 2000, "step": 50 }
+  ],
+  "stability": "stable",
+  "description": "Smooth alpha crossfade between clips."
+}

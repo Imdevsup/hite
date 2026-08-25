@@ -1,0 +1,13 @@
+{
+  "key": "vignette-harsh",
+  "label": "Vignette · Harsh",
+  "category": "color",
+  "tags": ["color", "vignette", "dramatic"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "vignette",
+  "params": [
+    { "key": "angle", "label": "Falloff", "kind": "range", "default": 2, "min": 1.5, "max": 4 }
+  ],
+  "stability": "stable",
+  "description": "Aggressive corner darkening. Makes the frame feel pressed."
+}

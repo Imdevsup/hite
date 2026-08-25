@@ -1,0 +1,1969 @@
+[
+  {
+    "key": "chromatic-aberration-drift",
+    "label": "Chromatic Aberration · Drift",
+    "category": "glitch",
+    "tags": [
+      "glitch",
+      "chromatic",
+      "ambient"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "rgbashift",
+    "params": [
+      {
+        "key": "strength",
+        "label": "Strength",
+        "kind": "range",
+        "default": 3,
+        "min": 1,
+        "max": 8
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Gentle always-on RGB drift. VHS-adjacent."
+  },
+  {
+    "key": "chromatic-flash",
+    "label": "Chromatic Flash",
+    "category": "glitch",
+    "tags": [
+      "glitch",
+      "flash",
+      "beat"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "rgbashift",
+    "params": [
+      {
+        "key": "strength",
+        "label": "Strength",
+        "kind": "range",
+        "default": 8,
+        "min": 2,
+        "max": 20
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Instantaneous chromatic flash — one-frame pop used at beat drops."
+  },
+  {
+    "key": "compressor-vocal",
+    "label": "Compressor · Vocal",
+    "category": "audio",
+    "tags": [
+      "audio",
+      "compressor",
+      "vocal"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "acompressor",
+    "params": [
+      {
+        "key": "threshold",
+        "label": "Threshold (dB)",
+        "kind": "range",
+        "default": -20,
+        "min": -40,
+        "max": 0
+      },
+      {
+        "key": "ratio",
+        "label": "Ratio",
+        "kind": "range",
+        "default": 4,
+        "min": 1,
+        "max": 20
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "contrast-cream",
+    "label": "Contrast · Cream",
+    "category": "color",
+    "tags": [
+      "color",
+      "contrast",
+      "cream"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "eq",
+    "params": [
+      {
+        "key": "amount",
+        "label": "Contrast",
+        "kind": "range",
+        "default": 1.15,
+        "min": 1,
+        "max": 1.4
+      },
+      {
+        "key": "brightness",
+        "label": "Cream",
+        "kind": "range",
+        "default": 0.02,
+        "min": -0.1,
+        "max": 0.1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "curve-lift-blacks",
+    "label": "Curve · Lift Blacks",
+    "category": "color",
+    "tags": [
+      "color",
+      "curves",
+      "cinema"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "curves",
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Cinema-grade black lift — keeps shadows readable without flattening contrast."
+  },
+  {
+    "key": "eq-bright",
+    "label": "EQ · Bright",
+    "category": "audio",
+    "tags": [
+      "audio",
+      "eq",
+      "bright"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "bass+treble",
+    "params": [
+      {
+        "key": "bass",
+        "label": "Bass",
+        "kind": "range",
+        "default": -2,
+        "min": -6,
+        "max": 6
+      },
+      {
+        "key": "treble",
+        "label": "Treble",
+        "kind": "range",
+        "default": 2,
+        "min": -6,
+        "max": 6
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "glitch-bars",
+    "label": "Glitch Bars",
+    "category": "glitch",
+    "tags": [
+      "glitch",
+      "bars",
+      "digital"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "noise",
+    "params": [
+      {
+        "key": "density",
+        "label": "Density",
+        "kind": "percent",
+        "default": 0.4
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Horizontal tearing bars — digital-artifact aesthetic."
+  },
+  {
+    "key": "grain-fine-medium",
+    "label": "Grain · Fine Medium",
+    "category": "color",
+    "tags": [
+      "color",
+      "grain",
+      "film",
+      "texture"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "noise",
+    "params": [
+      {
+        "key": "strength",
+        "label": "Amount",
+        "kind": "range",
+        "default": 12,
+        "min": 4,
+        "max": 40
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "35mm-ish fine film grain. Adds tactile texture."
+  },
+  {
+    "key": "look-a24",
+    "label": "A24",
+    "category": "looks",
+    "tags": [
+      "look",
+      "a24",
+      "cinema",
+      "teal"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "lut-a24-moonlight",
+        "target": "all",
+        "params": {}
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "vignette-soft",
+        "target": "all",
+        "params": {}
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "grain-fine-medium",
+        "target": "all",
+        "params": {
+          "strength": 8
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "curve-lift-blacks",
+        "target": "all",
+        "params": {}
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Muted contrast, teal shadows, desaturated greens. The A24 night look."
+  },
+  {
+    "key": "look-brutalist-mono",
+    "label": "Brutalist · Mono",
+    "category": "looks",
+    "tags": [
+      "look",
+      "bw",
+      "brutalist",
+      "high-contrast"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "saturation-down",
+        "target": "all",
+        "params": {
+          "amount": 0
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "contrast-cream",
+        "target": "all",
+        "params": {
+          "amount": 1.35,
+          "brightness": -0.08
+        }
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Monochrome with crushed blacks and a hairline-hard frame."
+  },
+  {
+    "key": "look-casey-jump",
+    "label": "Casey · Jump",
+    "category": "looks",
+    "tags": [
+      "look",
+      "vlog",
+      "casey",
+      "whip"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "saturation-up",
+        "target": "all",
+        "params": {
+          "amount": 1.18
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "contrast-cream",
+        "target": "all",
+        "params": {
+          "amount": 1.08,
+          "brightness": 0.015
+        }
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Casey Neistat edit grammar — whip-pan transitions, captioned lower-thirds, slightly saturated grade."
+  },
+  {
+    "key": "look-cinema-warm",
+    "label": "Cinema · Warm",
+    "category": "looks",
+    "tags": [
+      "look",
+      "cinema",
+      "warm",
+      "kodachrome"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "lut-kodachrome-64",
+        "target": "all",
+        "params": {}
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "contrast-cream",
+        "target": "all",
+        "params": {
+          "amount": 1.12
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "vignette-soft",
+        "target": "all",
+        "params": {}
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Kodachrome-ish warm cinema grade."
+  },
+  {
+    "key": "look-document",
+    "label": "Document",
+    "category": "looks",
+    "tags": [
+      "look",
+      "documentary",
+      "neutral"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "grain-fine-medium",
+        "target": "all",
+        "params": {
+          "strength": 6
+        }
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "Neutral documentary grade — soft contrast, subtle grain, no stylization."
+  },
+  {
+    "key": "look-skull-face-drop",
+    "label": "Skull · Face · Drop",
+    "category": "looks",
+    "tags": [
+      "look",
+      "skull",
+      "face-tracked",
+      "drop",
+      "hypebeast"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyOverlay",
+        "overlayKey": "overlay-skull",
+        "startMs": "{{dropMs_minus_1600}}",
+        "endMs": "{{dropMs_plus_1900}}",
+        "placement": {
+          "mode": "face",
+          "trackFaceId": "{{faceId}}"
+        },
+        "params": {
+          "scale": "{{scale}}"
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "rgb-split-hard",
+        "target": {
+          "range": {
+            "startMs": "{{dropMs_minus_300}}",
+            "endMs": "{{dropMs_plus_300}}"
+          }
+        },
+        "params": {
+          "strength": "{{splitStrength}}"
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "zoom-punch",
+        "target": {
+          "range": {
+            "startMs": "{{dropMs_minus_100}}",
+            "endMs": "{{dropMs_plus_100}}"
+          }
+        },
+        "params": {
+          "amount": 1.15
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "glitch-bars",
+        "target": {
+          "range": {
+            "startMs": "{{dropMs_minus_100}}",
+            "endMs": "{{dropMs_plus_400}}"
+          }
+        },
+        "params": {
+          "density": 0.4
+        }
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "chromatic-flash",
+        "target": {
+          "range": {
+            "startMs": "{{dropMs}}",
+            "endMs": "{{dropMs_plus_50}}"
+          }
+        },
+        "params": {
+          "strength": 10
+        }
+      }
+    ],
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "enum",
+        "default": "medium",
+        "options": [
+          "light",
+          "medium",
+          "hard"
+        ]
+      },
+      {
+        "key": "faceId",
+        "label": "Face ID",
+        "kind": "text"
+      },
+      {
+        "key": "dropMs",
+        "label": "Drop (ms)",
+        "kind": "duration"
+      },
+      {
+        "key": "scale",
+        "label": "Scale",
+        "kind": "range",
+        "default": 1.15
+      }
+    ],
+    "requires": [
+      "beats",
+      "faces"
+    ],
+    "stability": "beta",
+    "description": "Face-tracked skull overlay stacked with RGB split + zoom punch + glitch bars + chromatic flash on the detected beat drop."
+  },
+  {
+    "key": "look-vhs-dream",
+    "label": "VHS Dream",
+    "category": "looks",
+    "tags": [
+      "look",
+      "vhs",
+      "retro"
+    ],
+    "engine": "composed",
+    "recipe": [
+      {
+        "type": "applyEffect",
+        "effectKey": "lut-vhs-worn",
+        "target": "all",
+        "params": {}
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "chromatic-aberration-drift",
+        "target": "all",
+        "params": {
+          "strength": 2.5
+        }
+      },
+      {
+        "type": "applyOverlay",
+        "overlayKey": "overlay-scan-lines",
+        "placement": {
+          "mode": "center"
+        },
+        "params": {
+          "opacity": 0.25
+        },
+        "startMs": 0,
+        "endMs": "{{durationMs}}"
+      },
+      {
+        "type": "applyEffect",
+        "effectKey": "audio-saturation-soft",
+        "target": "all",
+        "params": {}
+      }
+    ],
+    "params": [],
+    "requires": [],
+    "stability": "stable",
+    "description": "VHS tape approximation. LUT + chromatic drift + scanlines + soft saturation."
+  },
+  {
+    "key": "lut-a24-dusk",
+    "label": "A24 Dusk",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "a24"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/a24-dusk.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-a24-moonlight",
+    "label": "A24 · Moonlight",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "a24",
+      "cinema",
+      "teal"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/a24-moonlight.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Muted contrast, teal shadows, desaturated greens. A24 night-grade reference."
+  },
+  {
+    "key": "lut-cinestill-800t",
+    "label": "Cinestill 800t",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "cinestill"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/cinestill-800t.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-ektachrome-100",
+    "label": "Ektachrome 100",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "ektachrome"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/ektachrome-100.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-fuji-pro-400h",
+    "label": "Fuji Pro 400h",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "fuji"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/fuji-pro-400h.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-kodachrome-64",
+    "label": "Kodachrome 64",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "film",
+      "warm",
+      "vintage"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/kodachrome-64.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Warm midtones, lifted blacks, saturated reds. The Kodachrome look."
+  },
+  {
+    "key": "lut-polaroid-sx70",
+    "label": "Polaroid Sx70",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "polaroid"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/polaroid-sx70.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-portra-160",
+    "label": "Portra 160",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "portra"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/portra-160.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-vhs-fresh",
+    "label": "Vhs Fresh",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "vhs"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/vhs-fresh.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "lut-vhs-worn",
+    "label": "VHS · Worn Tape",
+    "category": "luts",
+    "tags": [
+      "lut",
+      "vhs",
+      "retro",
+      "faded"
+    ],
+    "engine": "lut",
+    "lutFile": "/luts/vhs-worn.cube",
+    "params": [
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 1
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Analog VHS tape color decay. Magenta cast, crushed highlights, period-correct."
+  },
+  {
+    "key": "overlay-light-leak",
+    "label": "Light Leak",
+    "category": "overlays",
+    "tags": [
+      "overlay",
+      "light-leak",
+      "film"
+    ],
+    "engine": "overlay-asset",
+    "overlayAsset": "/overlays/light-leak.webm",
+    "params": [
+      {
+        "key": "opacity",
+        "label": "Opacity",
+        "kind": "percent",
+        "default": 0.7
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "overlay-lightning",
+    "label": "Lightning",
+    "category": "overlays",
+    "tags": [
+      "overlay",
+      "lightning",
+      "flash"
+    ],
+    "engine": "overlay-asset",
+    "overlayAsset": "/overlays/lightning.webm",
+    "params": [
+      {
+        "key": "scale",
+        "label": "Scale",
+        "kind": "range",
+        "default": 1.5,
+        "min": 0.5,
+        "max": 3
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "overlay-scan-lines",
+    "label": "Scan Lines",
+    "category": "overlays",
+    "tags": [
+      "overlay",
+      "scanlines",
+      "crt",
+      "retro"
+    ],
+    "engine": "overlay-asset",
+    "overlayAsset": "/overlays/scan-lines.png",
+    "params": [
+      {
+        "key": "opacity",
+        "label": "Opacity",
+        "kind": "percent",
+        "default": 0.35
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "overlay-skull",
+    "label": "Skull",
+    "category": "overlays",
+    "tags": [
+      "overlay",
+      "skull",
+      "drop"
+    ],
+    "engine": "overlay-asset",
+    "overlayAsset": "/overlays/skull.webm",
+    "params": [
+      {
+        "key": "scale",
+        "label": "Scale",
+        "kind": "range",
+        "default": 1.15,
+        "min": 0.5,
+        "max": 3
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Transparent WebM skull overlay. Use with face-tracked placement."
+  },
+  {
+    "key": "proc-lens-flare-cool",
+    "label": "Lens Flare · Cool",
+    "category": "procedural",
+    "tags": [
+      "procedural",
+      "lens-flare",
+      "cool",
+      "teal"
+    ],
+    "engine": "procedural",
+    "params": [
+      {
+        "key": "temperature",
+        "label": "Temperature (K)",
+        "kind": "range",
+        "default": 7500
+      },
+      {
+        "key": "strength",
+        "label": "Strength",
+        "kind": "percent",
+        "default": 0.35
+      }
+    ],
+    "requires": [],
+    "stability": "experimental"
+  },
+  {
+    "key": "proc-lens-flare-warm",
+    "label": "Lens Flare · Warm",
+    "category": "procedural",
+    "tags": [
+      "procedural",
+      "lens-flare",
+      "warm"
+    ],
+    "engine": "procedural",
+    "params": [
+      {
+        "key": "temperature",
+        "label": "Temperature (K)",
+        "kind": "range",
+        "default": 4500,
+        "min": 2500,
+        "max": 8000
+      },
+      {
+        "key": "strength",
+        "label": "Strength",
+        "kind": "percent",
+        "default": 0.4
+      }
+    ],
+    "requires": [],
+    "stability": "experimental",
+    "description": "Shader-based lens flare. Temperature drives the hue."
+  },
+  {
+    "key": "reverb-plate",
+    "label": "Reverb · Plate",
+    "category": "audio",
+    "tags": [
+      "audio",
+      "reverb",
+      "plate"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "aecho",
+    "params": [
+      {
+        "key": "mix",
+        "label": "Mix",
+        "kind": "percent",
+        "default": 0.2
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "rgb-split-hard",
+    "label": "RGB Split · Hard",
+    "category": "glitch",
+    "tags": [
+      "glitch",
+      "rgb",
+      "split",
+      "drop"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "rgbashift",
+    "params": [
+      {
+        "key": "strength",
+        "label": "Strength",
+        "kind": "range",
+        "default": 12,
+        "min": 2,
+        "max": 40
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Hard chromatic separation. Fires well on beat drops."
+  },
+  {
+    "key": "saturation-up",
+    "label": "Saturation Up",
+    "category": "color",
+    "tags": [
+      "color",
+      "saturation",
+      "warm"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "eq",
+    "params": [
+      {
+        "key": "amount",
+        "label": "Amount",
+        "kind": "range",
+        "default": 1.2,
+        "min": 1,
+        "max": 2,
+        "step": 0.05
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Bumps global saturation. Default +20%."
+  },
+  {
+    "key": "text-hashtag-sticker",
+    "label": "Hashtag Sticker",
+    "category": "text",
+    "tags": [
+      "text",
+      "hashtag",
+      "social"
+    ],
+    "engine": "remotion",
+    "component": "HashtagSticker",
+    "params": [
+      {
+        "key": "tag",
+        "label": "Tag",
+        "kind": "text",
+        "default": "#hite"
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "text-lower-third-basic",
+    "label": "Lower Third · Basic",
+    "category": "text",
+    "tags": [
+      "text",
+      "lower-third",
+      "caption"
+    ],
+    "engine": "remotion",
+    "component": "LowerThirdBasic",
+    "params": [
+      {
+        "key": "title",
+        "label": "Title",
+        "kind": "text",
+        "default": "Name"
+      },
+      {
+        "key": "subtitle",
+        "label": "Subtitle",
+        "kind": "text",
+        "default": "Role"
+      },
+      {
+        "key": "accent",
+        "label": "Accent color",
+        "kind": "color",
+        "default": "#C6F24E"
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "text-typewriter",
+    "label": "Typewriter",
+    "category": "text",
+    "tags": [
+      "text",
+      "typewriter",
+      "reveal"
+    ],
+    "engine": "remotion",
+    "component": "Typewriter",
+    "params": [
+      {
+        "key": "text",
+        "label": "Text",
+        "kind": "text",
+        "default": "Hello."
+      },
+      {
+        "key": "speed",
+        "label": "Chars/sec",
+        "kind": "range",
+        "default": 18,
+        "min": 4,
+        "max": 40
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-burn-to-black",
+    "label": "Burn To Black",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "burn"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-burn-to-black-fast",
+    "label": "Burn To Black · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "burn",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-burn-to-white",
+    "label": "Burn To White",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "burn"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-burn-to-white-fast",
+    "label": "Burn To White · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "burn",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-crossfade",
+    "label": "Crossfade",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "crossfade"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-crossfade-fast",
+    "label": "Crossfade · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "crossfade",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-cube-rotate-l",
+    "label": "Cube Rotate · Left",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "3d",
+      "cube"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 600
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-cube-rotate-r",
+    "label": "Cube Rotate R",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "cube"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-cube-rotate-r-fast",
+    "label": "Cube Rotate R · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "cube",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-dissolve",
+    "label": "Dissolve",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "dissolve"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-dissolve-fast",
+    "label": "Dissolve · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "dissolve",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-fade",
+    "label": "Fade",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "fade",
+      "classic"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Smooth alpha crossfade between clips."
+  },
+  {
+    "key": "trans-flash-cut",
+    "label": "Flash Cut",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "flash"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-flash-cut-fast",
+    "label": "Flash Cut · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "flash",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-glitch-cut",
+    "label": "Glitch Cut",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "glitch",
+      "hard"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 180
+      },
+      {
+        "key": "intensity",
+        "label": "Intensity",
+        "kind": "percent",
+        "default": 0.85
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-rgb-split-cut",
+    "label": "Rgb Split Cut",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "rgb"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-rgb-split-cut-fast",
+    "label": "Rgb Split Cut · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "rgb",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-slide-left",
+    "label": "Slide Left",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "slide"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-slide-left-fast",
+    "label": "Slide Left · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "slide",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-slide-right",
+    "label": "Slide Right",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "slide"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-slide-right-fast",
+    "label": "Slide Right · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "slide",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-whip-pan-l",
+    "label": "Whip Pan · Left",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "whip",
+      "pan",
+      "vlog"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 240,
+        "min": 120,
+        "max": 600
+      },
+      {
+        "key": "blur",
+        "label": "Motion blur",
+        "kind": "percent",
+        "default": 0.8
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Casey-style whip pan — fast horizontal motion-blurred swap."
+  },
+  {
+    "key": "trans-whip-pan-r",
+    "label": "Whip Pan R",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "whip"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-whip-pan-r-fast",
+    "label": "Whip Pan R · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "whip",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-down",
+    "label": "Wipe Down",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-down-fast",
+    "label": "Wipe Down · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-left",
+    "label": "Wipe Left",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-left-fast",
+    "label": "Wipe Left · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-right",
+    "label": "Wipe Right",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-right-fast",
+    "label": "Wipe Right · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-up",
+    "label": "Wipe Up",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-wipe-up-fast",
+    "label": "Wipe Up · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "wipe",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-zoom-in",
+    "label": "Zoom In",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "zoom"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-zoom-in-fast",
+    "label": "Zoom In · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "zoom",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-zoom-out",
+    "label": "Zoom Out",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "zoom"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 400,
+        "min": 100,
+        "max": 2000,
+        "step": 50
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "trans-zoom-out-fast",
+    "label": "Zoom Out · Fast",
+    "category": "transitions",
+    "tags": [
+      "transition",
+      "zoom",
+      "fast"
+    ],
+    "engine": "gl-transitions",
+    "params": [
+      {
+        "key": "duration",
+        "label": "Duration",
+        "kind": "duration",
+        "default": 200
+      }
+    ],
+    "requires": [],
+    "stability": "stable"
+  },
+  {
+    "key": "vignette-harsh",
+    "label": "Vignette · Harsh",
+    "category": "color",
+    "tags": [
+      "color",
+      "vignette",
+      "dramatic"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "vignette",
+    "params": [
+      {
+        "key": "angle",
+        "label": "Falloff",
+        "kind": "range",
+        "default": 2,
+        "min": 1.5,
+        "max": 4
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Aggressive corner darkening. Makes the frame feel pressed."
+  },
+  {
+    "key": "vignette-soft",
+    "label": "Vignette · Soft",
+    "category": "color",
+    "tags": [
+      "color",
+      "vignette",
+      "cinema"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "vignette",
+    "params": [
+      {
+        "key": "angle",
+        "label": "Falloff",
+        "kind": "range",
+        "default": 4,
+        "min": 2,
+        "max": 8
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Subtle corner darkening — the grading-suite default."
+  },
+  {
+    "key": "zoom-punch",
+    "label": "Zoom Punch",
+    "category": "glitch",
+    "tags": [
+      "glitch",
+      "zoom",
+      "punch",
+      "hypebeast"
+    ],
+    "engine": "ffmpeg",
+    "ffmpegFilter": "scale+crop",
+    "params": [
+      {
+        "key": "amount",
+        "label": "Amount",
+        "kind": "range",
+        "default": 1.12,
+        "min": 1.05,
+        "max": 1.3
+      }
+    ],
+    "requires": [],
+    "stability": "stable",
+    "description": "Quick zoom-in on a frame. Used to punctuate beats."
+  }
+]

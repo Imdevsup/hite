@@ -1,0 +1,12 @@
+{
+  "key": "reverb-plate",
+  "label": "Reverb · Plate",
+  "category": "audio",
+  "tags": ["audio", "reverb", "plate"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "aecho",
+  "params": [
+    { "key": "mix", "label": "Mix", "kind": "percent", "default": 0.2 }
+  ],
+  "stability": "stable"
+}

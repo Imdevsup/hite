@@ -1,0 +1,13 @@
+{
+  "key": "trans-whip-pan-l",
+  "label": "Whip Pan · Left",
+  "category": "transitions",
+  "tags": ["transition", "whip", "pan", "vlog"],
+  "engine": "gl-transitions",
+  "params": [
+    { "key": "duration", "label": "Duration", "kind": "duration", "default": 240, "min": 120, "max": 600 },
+    { "key": "blur", "label": "Motion blur", "kind": "percent", "default": 0.8 }
+  ],
+  "stability": "stable",
+  "description": "Casey-style whip pan — fast horizontal motion-blurred swap."
+}

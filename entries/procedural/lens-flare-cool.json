@@ -1,0 +1,12 @@
+{
+  "key": "proc-lens-flare-cool",
+  "label": "Lens Flare · Cool",
+  "category": "procedural",
+  "tags": ["procedural", "lens-flare", "cool", "teal"],
+  "engine": "procedural",
+  "params": [
+    { "key": "temperature", "label": "Temperature (K)", "kind": "range", "default": 7500 },
+    { "key": "strength", "label": "Strength", "kind": "percent", "default": 0.35 }
+  ],
+  "stability": "experimental"
+}

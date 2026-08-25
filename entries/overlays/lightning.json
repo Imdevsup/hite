@@ -1,0 +1,12 @@
+{
+  "key": "overlay-lightning",
+  "label": "Lightning",
+  "category": "overlays",
+  "tags": ["overlay", "lightning", "flash"],
+  "engine": "overlay-asset",
+  "overlayAsset": "/overlays/lightning.webm",
+  "params": [
+    { "key": "scale", "label": "Scale", "kind": "range", "default": 1.5, "min": 0.5, "max": 3 }
+  ],
+  "stability": "stable"
+}

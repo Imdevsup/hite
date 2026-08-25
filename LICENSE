@@ -1,0 +1,74 @@
+MIT License
+
+Copyright (c) 2026 HITE contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+THIRD-PARTY NOTICE — Remotion is NOT MIT licensed
+---------------------------------------------------------------------------
+
+The MIT license above covers HITE's own source code. It does NOT relicense
+HITE's dependencies, and one of them carries terms you must read before using
+this project commercially.
+
+HITE's video engine is Remotion (`remotion`, `@remotion/bundler`,
+`@remotion/player`, `@remotion/renderer`). Remotion is source-available under
+its own license, not an OSI open-source license. In summary, as of this
+writing:
+
+  * Free for individuals, for non-profit organisations, and for for-profit
+    companies with up to 3 employees.
+  * Companies above that threshold need a paid Remotion Company License.
+
+This is not legal advice and the summary may go out of date — read the current
+terms at https://www.remotion.dev/docs/license and https://remotion.pro before
+deploying HITE commercially.
+
+Remotion is central to how HITE renders video (it drives both the preview and
+the export), so it cannot simply be removed. If your organisation cannot accept
+Remotion's terms, you cannot run HITE's render path as shipped.
+
+---------------------------------------------------------------------------
+THIRD-PARTY NOTICE — ffmpeg binaries (GPL) and GSAP
+---------------------------------------------------------------------------
+
+Two further dependencies carry terms that are not MIT. Neither changes the
+licence of HITE's own source, but both bind you when you distribute or deploy.
+
+`ffmpeg-static` and `ffprobe-static` ship prebuilt FFmpeg binaries licensed
+GPL-3.0-or-later. HITE invokes them as separate executables over a child
+process and never links against them, which is why HITE's own source can stay
+MIT. If you redistribute a build that bundles those binaries, the GPL's terms
+travel with the binaries: ship the corresponding source offer, or swap in an
+FFmpeg you have built under terms you can accept. Nothing in HITE depends on a
+particular build; `lib/ffmpeg/bin.ts` is the one place the path is resolved.
+
+`gsap` is used only by the marketing landing page's scroll sequence. It is
+distributed under GSAP's own "standard, no charge" licence, not an OSI licence
+— free for the great majority of uses, including commercial ones, but with
+terms of its own. Read them at https://gsap.com/standard-license. Nothing in
+the editor, the planner, the reducer or the render path imports it, so removing
+the landing page removes the dependency entirely.
+
+`@axe-core/playwright`, used only by the accessibility checks in `qa/`, is
+MPL-2.0. It is a development dependency and is not part of any shipped bundle.
+
+This is not legal advice, and these summaries can go out of date. Read the
+current terms before redistributing.

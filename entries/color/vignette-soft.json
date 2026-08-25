@@ -1,0 +1,13 @@
+{
+  "key": "vignette-soft",
+  "label": "Vignette · Soft",
+  "category": "color",
+  "tags": ["color", "vignette", "cinema"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "vignette",
+  "params": [
+    { "key": "angle", "label": "Falloff", "kind": "range", "default": 4, "min": 2, "max": 8 }
+  ],
+  "stability": "stable",
+  "description": "Subtle corner darkening — the grading-suite default."
+}

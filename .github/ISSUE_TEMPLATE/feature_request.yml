@@ -1,0 +1,84 @@
+name: Feature request
+description: Propose a capability HITE does not have yet.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [what works and what does not](https://github.com/Imdevsup/hite/blob/HEAD/README.md#what-works-what-does-not)
+        first. Several things that look missing are deliberately withheld rather than absent: 30 of
+        the 76 catalog entries are hidden from the model because nothing can paint them, face
+        detection was removed rather than stubbed, and beat-driven look recipes are gated on render
+        variables that have no supplier yet. If your request is one of those, say so, and this
+        becomes a "finish it" issue rather than a "start it" one.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is the problem?
+      description: >-
+        The edit you were trying to make and what stopped you. Describe the outcome you wanted, not
+        the implementation you have in mind. That comes next.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What should HITE do instead?
+      description: >-
+        If it is an AI feature, include the sentence you would actually type into the prompt bar and
+        what the timeline should look like afterwards.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Which layer does this touch, as best you can tell?
+      description: >-
+        A guess is fine. The point is to surface the case where a request that sounds like one entry
+        in a JSON file is really a change to the command union, which has to land in four places at
+        once (`commands.ts`, `reducer.ts`, render support, and the flat AI mapper).
+      options:
+        - A new catalog entry (effect, look, transition, overlay) plus its renderer
+        - A new kind of edit (a new EditCommand variant)
+        - A new AI tool or a change to the tool router
+        - The editor UI (timeline, preview, windows, shortcuts)
+        - The worker, the job queue, analysis or export
+        - Provider support (a new model provider or model)
+        - Docs, setup or tooling
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: renderability
+    attributes:
+      label: Can the render engine already do this?
+      description: >-
+        Only for a visual capability. `lib/ai/tools/renderableEntry.ts` withholds any key the
+        pipeline cannot actually paint, so a proposal that needs new pixels needs a renderer to go
+        with it. Blended and moving transitions are the standing example: clips abut end to end in
+        the IR, so 23 of the 36 transitions cannot exist until that changes. Say if you know your
+        idea lands in that hole.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What did you try instead?
+      description: >-
+        Existing prompts, manual timeline edits, or another tool. Something that already gets you
+        80% of the way there is useful signal about how much this is worth.
+
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Would you be up for implementing it?
+      description: "No obligation. See CONTRIBUTING.md for what each of these actually involves."
+      options:
+        - "Yes, with review"
+        - "Maybe, if someone sketches the approach"
+        - "No, just proposing it"
+    validations:
+      required: true

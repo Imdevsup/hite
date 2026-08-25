@@ -1,0 +1,12 @@
+{
+  "key": "overlay-light-leak",
+  "label": "Light Leak",
+  "category": "overlays",
+  "tags": ["overlay", "light-leak", "film"],
+  "engine": "overlay-asset",
+  "overlayAsset": "/overlays/light-leak.webm",
+  "params": [
+    { "key": "opacity", "label": "Opacity", "kind": "percent", "default": 0.7 }
+  ],
+  "stability": "stable"
+}

@@ -1,0 +1,11 @@
+{
+  "key": "curve-lift-blacks",
+  "label": "Curve · Lift Blacks",
+  "category": "color",
+  "tags": ["color", "curves", "cinema"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "curves",
+  "params": [],
+  "stability": "stable",
+  "description": "Cinema-grade black lift — keeps shadows readable without flattening contrast."
+}

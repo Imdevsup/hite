@@ -1,0 +1,270 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>HITE sample take</title>
+<style>
+  html,body{margin:0;background:#000;overflow:hidden}
+  canvas{display:block}
+</style>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+/**
+ * The sample take, as motion design rather than as a gradient.
+ *
+ * WHY IT IS DRAWN AND NOT FILTERED. The previous take was procedural colour fields, and the problem
+ * with it was not that it looked cheap — it was that HITE'S EDITS WERE INVISIBLE ON IT. A cut
+ * between two soft blobs is not obviously a cut; a zoom punch on something with no edges does not
+ * read as a punch; a fade out of a shape that has no shape is just a dim. Every shot here has a
+ * hard graphic subject with edges and a distinct motion signature, so a cut lands, a punch snaps,
+ * and a grade visibly moves the colour.
+ *
+ * EVERY FRAME IS A PURE FUNCTION OF ITS INDEX. No Date.now, no Math.random — `draw(n)` renders frame
+ * n and nothing else. That is what lets the renderer step frames deterministically and get the same
+ * bytes twice, and it is the same rule lib/edl and lib/render are lint-enforced to follow.
+ */
+const C = document.getElementById("c");
+const X = C.getContext("2d", { alpha: false });
+const W = 1280, H = 720, FPS = 30, SHOT = 5, BPM = 120;
+const SHOT_F = SHOT * FPS;
+const BEAT_F = (60 / BPM) * FPS;          // 15 frames
+const TOTAL_F = 9 * SHOT_F;
+
+/** Deterministic PRNG, so particle fields are stable across runs. */
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const SHOTS = [
+  { n: "01", name: "OPENING",   ink: "#8AA6FF", bg: "#080B1E", lum: "dark"  },
+  { n: "02", name: "WIDE",      ink: "#0A1A1E", bg: "#3FE0D0", lum: "bright"},
+  { n: "03", name: "DETAIL",    ink: "#FFB454", bg: "#1A0E02", lum: "dark"  },
+  { n: "04", name: "CUTAWAY",   ink: "#2A0716", bg: "#FF7AB8", lum: "bright"},
+  { n: "05", name: "INTERVIEW", ink: "#6FE7A8", bg: "#04140E", lum: "dark"  },
+  { n: "06", name: "B ROLL",    ink: "#0B1330", bg: "#7FA9FF", lum: "bright"},
+  { n: "07", name: "REACTION",  ink: "#E081FF", bg: "#150522", lum: "dark"  },
+  { n: "08", name: "DROP",      ink: "#0A0A0C", bg: "#F2F4F8", lum: "bright"},
+  { n: "09", name: "CLOSE",     ink: "#9FB0C8", bg: "#0D1118", lum: "dark"  },
+];
+
+/** Eased beat pulse: 1 on the beat, decaying to 0 before the next. */
+function pulse(f, mult) {
+  const p = (f % (BEAT_F * (mult || 1))) / (BEAT_F * (mult || 1));
+  return Math.pow(1 - p, 2.4);
+}
+const lerp = (a, b, t) => a + (b - a) * t;
+
+/* ── 01 OPENING — a dot grid ripples outward, camera pushes in. ─────────────────────────────── */
+function shotOpening(t, f, s) {
+  const cols = 34, rows = 20;
+  const cx = W / 2, cy = H / 2;
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      const x = ((i + 0.5) / cols) * W, y = ((j + 0.5) / rows) * H;
+      const d = Math.hypot(x - cx, y - cy) / 620;
+      const wv = Math.sin(d * 9 - t * 3.1);
+      const r = 1.4 + 3.6 * Math.max(0, wv);
+      X.globalAlpha = 0.28 + 0.62 * Math.max(0, wv);
+      X.fillStyle = s.ink;
+      X.beginPath(); X.arc(x, y, r, 0, 6.2832); X.fill();
+    }
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 02 WIDE — a horizontal data stream, bars scrolling right. ──────────────────────────────── */
+function shotWide(t, f, s) {
+  const rows = 13, gap = H / rows;
+  const R = rng(4021);
+  for (let j = 0; j < rows; j++) {
+    const y = j * gap + gap * 0.28;
+    const speed = 90 + R() * 210;
+    const seg = 9;
+    for (let k = 0; k < seg; k++) {
+      const w = 40 + R() * 230;
+      const off = (R() * W + t * speed) % (W + 420) - 210;
+      X.fillStyle = s.ink;
+      X.globalAlpha = 0.16 + 0.72 * Math.pow(R(), 0.6);
+      X.fillRect(off + k * 150, y, w, gap * 0.4);
+    }
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 03 DETAIL — concentric rings, a gap sweeping around them. ──────────────────────────────── */
+function shotDetail(t, f, s) {
+  const cx = W / 2, cy = H / 2;
+  X.lineWidth = 3;
+  for (let i = 1; i <= 16; i++) {
+    const r = i * 30 + Math.sin(t * 1.4 + i * 0.5) * 7;
+    const a0 = t * (0.7 + i * 0.055);
+    X.strokeStyle = s.ink;
+    X.globalAlpha = 0.2 + 0.7 * (1 - i / 18);
+    X.beginPath(); X.arc(cx, cy, r, a0, a0 + 4.9); X.stroke();
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 04 CUTAWAY — thick diagonal stripes wiping across. ─────────────────────────────────────── */
+function shotCutaway(t, f, s) {
+  X.save();
+  X.translate(W / 2, H / 2); X.rotate(-0.5); X.translate(-W / 2, -H / 2);
+  const band = 96;
+  const off = (t * 210) % (band * 2);
+  for (let x = -900; x < W + 900; x += band * 2) {
+    X.fillStyle = s.ink;
+    X.globalAlpha = 0.9;
+    X.fillRect(x + off, -400, band, H + 800);
+  }
+  X.globalAlpha = 1;
+  X.restore();
+}
+
+/* ── 05 INTERVIEW — a centre pulse on the beat with dots in orbit. ──────────────────────────── */
+function shotInterview(t, f, s) {
+  const cx = W / 2, cy = H / 2;
+  const p = pulse(f, 1);
+  X.strokeStyle = s.ink; X.lineWidth = 2.5;
+  X.globalAlpha = 0.9;
+  X.beginPath(); X.arc(cx, cy, 74 + p * 26, 0, 6.2832); X.stroke();
+  X.globalAlpha = 0.35;
+  X.beginPath(); X.arc(cx, cy, 128 + p * 52, 0, 6.2832); X.stroke();
+  for (let i = 0; i < 22; i++) {
+    const a = t * 0.5 + (i / 22) * 6.2832;
+    const r = 210 + Math.sin(t * 1.1 + i) * 34;
+    X.fillStyle = s.ink;
+    X.globalAlpha = 0.5 + 0.5 * Math.sin(t * 2 + i);
+    X.beginPath(); X.arc(cx + Math.cos(a) * r * 1.5, cy + Math.sin(a) * r, 4.2, 0, 6.2832); X.fill();
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 06 B ROLL — a perspective grid running to the horizon. ─────────────────────────────────── */
+function shotBRoll(t, f, s) {
+  const hz = H * 0.42;
+  X.strokeStyle = s.ink; X.lineWidth = 2;
+  X.globalAlpha = 0.85;
+  for (let i = -14; i <= 14; i++) {
+    X.beginPath(); X.moveTo(W / 2 + i * 30, hz); X.lineTo(W / 2 + i * 300, H + 60); X.stroke();
+  }
+  for (let k = 0; k < 22; k++) {
+    const z = ((k / 22) + (t * 0.24) % (1 / 22)) % 1;
+    const y = hz + Math.pow(z, 2.6) * (H - hz + 90);
+    X.globalAlpha = 0.2 + 0.7 * z;
+    X.beginPath(); X.moveTo(0, y); X.lineTo(W, y); X.stroke();
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 07 REACTION — radial spokes, spinning hard. ────────────────────────────────────────────── */
+function shotReaction(t, f, s) {
+  const cx = W / 2, cy = H / 2;
+  const n = 26;
+  X.save(); X.translate(cx, cy); X.rotate(t * 1.15);
+  for (let i = 0; i < n; i++) {
+    X.rotate(6.2832 / n);
+    X.fillStyle = s.ink;
+    X.globalAlpha = i % 2 ? 0.9 : 0.34;
+    X.fillRect(96, -9, 560 + Math.sin(t * 3 + i) * 60, 18);
+  }
+  X.restore();
+  X.globalAlpha = 1;
+}
+
+/* ── 08 DROP — the loud one. Bars strobe on the beat, rings expand off it. ──────────────────── */
+function shotDrop(t, f, s) {
+  const p = pulse(f, 1);
+  const bars = 15;
+  // ENERGETIC BUT CONTINUOUS. A harder strobe here (bar heights on sin(t*5), alpha pulsing every
+  // half beat) looked right and broke the product: `scdet` scores mean absolute frame difference,
+  // and frames that violent read as 24 separate cuts INSIDE this shot, so "cut at every scene
+  // change" returned 33 clips instead of 9. The motion is now fast but frame-to-frame correlated.
+  for (let i = 0; i < bars; i++) {
+    const w = W / bars;
+    const h = 190 + Math.abs(Math.sin(t * 2.1 + i * 0.7)) * (300 + p * 70);
+    X.fillStyle = s.ink;
+    X.globalAlpha = 0.9;
+    X.fillRect(i * w + 7, H / 2 - h / 2, w - 14, h);
+  }
+  X.strokeStyle = s.ink; X.lineWidth = 8;
+  for (let k = 0; k < 3; k++) {
+    const q = ((f / (BEAT_F * 4)) + k / 3) % 1;
+    X.globalAlpha = (1 - q) * 0.7;
+    X.beginPath(); X.arc(W / 2, H / 2, q * 700, 0, 6.2832); X.stroke();
+  }
+  X.globalAlpha = 1;
+}
+
+/* ── 09 CLOSE — particles settling, everything letting go. ──────────────────────────────────── */
+function shotClose(t, f, s) {
+  const R = rng(9137);
+  for (let i = 0; i < 190; i++) {
+    const bx = R() * W, by = R() * H, sp = 12 + R() * 44, ph = R() * 6.2832;
+    const y = (by + t * sp) % (H + 40) - 20;
+    const x = bx + Math.sin(t * 0.5 + ph) * 26;
+    X.fillStyle = s.ink;
+    X.globalAlpha = (0.12 + 0.5 * R()) * Math.max(0, 1 - t / SHOT);
+    X.beginPath(); X.arc(x, y, 1.4 + R() * 2.6, 0, 6.2832); X.fill();
+  }
+  X.globalAlpha = 1;
+}
+
+const RENDER = [shotOpening, shotWide, shotDetail, shotCutaway, shotInterview, shotBRoll, shotReaction, shotDrop, shotClose];
+
+/** The furniture every shot carries: slate, corner ticks, running timecode, mark. */
+function furniture(f, s, idx) {
+  const ink = s.ink;
+  X.strokeStyle = ink; X.globalAlpha = 0.5; X.lineWidth = 2;
+  const m = 44, L = 26;
+  const corners = [[m, m, 1, 1], [W - m, m, -1, 1], [m, H - m, 1, -1], [W - m, H - m, -1, -1]];
+  for (const [x, y, sx, sy] of corners) {
+    X.beginPath(); X.moveTo(x, y); X.lineTo(x + L * sx, y); X.stroke();
+    X.beginPath(); X.moveTo(x, y); X.lineTo(x, y + L * sy); X.stroke();
+  }
+  X.globalAlpha = 0.42;
+  X.font = "500 17px ui-monospace, Consolas, monospace";
+  X.fillStyle = ink;
+  X.fillText("HITE SAMPLE TAKE", 78, m + 6);
+  const secs = (f / FPS);
+  const tc = String(Math.floor(secs / 60)).padStart(2, "0") + ":" + String(Math.floor(secs % 60)).padStart(2, "0") + ":" + String(f % FPS).padStart(2, "0");
+  X.fillText(tc, W - 178, m + 6);
+  // A plate behind the slate. Without it the number and the name sit straight on top of whatever the
+  // shot is drawing — over CUTAWAY's stripes and DROP's bars the slate was unreadable, and the slate
+  // is the one thing a viewer uses to tell which shots an edit kept.
+  X.globalAlpha = 0.34;
+  X.fillStyle = s.bg;
+  X.fillRect(60, H - 122, 400, 56);
+  X.globalAlpha = 0.96;
+  X.fillStyle = ink;
+  X.font = "600 42px ui-monospace, Consolas, monospace";
+  X.fillText(s.n, 78, H - 84);
+  X.font = "300 42px ui-monospace, Consolas, monospace";
+  X.fillText(s.name, 78 + 74, H - 84);
+  X.globalAlpha = 1;
+}
+
+/** Frame n. Pure. */
+function draw(n) {
+  const idx = Math.min(SHOTS.length - 1, Math.floor(n / SHOT_F));
+  const f = n - idx * SHOT_F;
+  const t = f / FPS;
+  const s = SHOTS[idx];
+  X.fillStyle = s.bg;
+  X.fillRect(0, 0, W, H);
+  // A slow push or pull on every shot: an edit lands harder against something already moving.
+  const dir = idx % 2 ? -1 : 1;
+  const z = 1 + dir * 0.055 * (f / SHOT_F) + (dir < 0 ? 0.055 : 0);
+  X.save();
+  X.translate(W / 2, H / 2); X.scale(z, z); X.translate(-W / 2, -H / 2);
+  RENDER[idx](t, f, s);
+  X.restore();
+  furniture(f, s, idx);
+}
+window.__draw = draw;
+window.__total = TOTAL_F;
+draw(0);
+</script>

@@ -1,0 +1,13 @@
+{
+  "key": "compressor-vocal",
+  "label": "Compressor · Vocal",
+  "category": "audio",
+  "tags": ["audio", "compressor", "vocal"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "acompressor",
+  "params": [
+    { "key": "threshold", "label": "Threshold (dB)", "kind": "range", "default": -20, "min": -40, "max": 0 },
+    { "key": "ratio", "label": "Ratio", "kind": "range", "default": 4, "min": 1, "max": 20 }
+  ],
+  "stability": "stable"
+}

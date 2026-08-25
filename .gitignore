@@ -1,0 +1,49 @@
+# ── dependencies ─────────────────────────────────────────────────────────────
+node_modules/
+
+# ── build output ─────────────────────────────────────────────────────────────
+.next/
+# Isolated one-off build output dirs (NEXT_DIST_DIR=… for race-free `next build` alongside dev).
+# Note: a build into one of these also appends include entries to tsconfig.json and rewrites
+# next-env.d.ts — check `git status` after running one and revert that churn.
+.next-*/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+
+# ── secrets & local env ──────────────────────────────────────────────────────
+# `.env.example` is the clone contract and IS committed — the negation below keeps it that way.
+# Everything else named `.env*` is treated as live credentials. `.env.production` and
+# `.env.development` are covered deliberately: Next.js loads both by name, so a contributor can
+# create one without ever typing "local", and previously neither was ignored.
+.env
+.env.*
+!.env.example
+
+# ── platform state ───────────────────────────────────────────────────────────
+# Contains .vercel/.env.production.local, which holds SUPABASE_SERVICE_ROLE_KEY (RLS-bypassing).
+.vercel
+
+# ── supabase local stack ─────────────────────────────────────────────────────
+supabase/.temp/
+supabase/.branches/
+
+# ── test & QA artifacts ──────────────────────────────────────────────────────
+# The Playwright HTML report embeds the whole run as one base64 blob — noisy and never useful in git.
+qa/.artifacts/
+test-results/
+playwright-report/
+
+# ── generated media ──────────────────────────────────────────────────────────
+public/effect-previews/*.webm
+!public/effect-previews/.gitkeep
+
+# ── logs & OS ────────────────────────────────────────────────────────────────
+*.log
+.DS_Store
+Thumbs.db
+
+# ── local scratch work ───────────────────────────────────────────────────────
+# One-off probes and screenshot scripts. Imported by nothing; eslint.config.mjs ignores it too.
+.scratch/

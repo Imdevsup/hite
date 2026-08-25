@@ -1,0 +1,16 @@
+{
+  "key": "look-a24",
+  "label": "A24",
+  "category": "looks",
+  "tags": ["look", "a24", "cinema", "teal"],
+  "engine": "composed",
+  "description": "Muted contrast, teal shadows, desaturated greens. The A24 night look.",
+  "recipe": [
+    { "type": "applyEffect", "effectKey": "lut-a24-moonlight", "target": "all", "params": {} },
+    { "type": "applyEffect", "effectKey": "vignette-soft", "target": "all", "params": {} },
+    { "type": "applyEffect", "effectKey": "grain-fine-medium", "target": "all", "params": { "strength": 8 } },
+    { "type": "applyEffect", "effectKey": "curve-lift-blacks", "target": "all", "params": {} }
+  ],
+  "params": [],
+  "stability": "stable"
+}

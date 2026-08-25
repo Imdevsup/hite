@@ -1,0 +1,13 @@
+{
+  "key": "eq-bright",
+  "label": "EQ · Bright",
+  "category": "audio",
+  "tags": ["audio", "eq", "bright"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "bass+treble",
+  "params": [
+    { "key": "bass", "label": "Bass", "kind": "range", "default": -2, "min": -6, "max": 6 },
+    { "key": "treble", "label": "Treble", "kind": "range", "default": 2, "min": -6, "max": 6 }
+  ],
+  "stability": "stable"
+}

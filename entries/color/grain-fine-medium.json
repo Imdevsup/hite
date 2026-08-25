@@ -1,0 +1,13 @@
+{
+  "key": "grain-fine-medium",
+  "label": "Grain · Fine Medium",
+  "category": "color",
+  "tags": ["color", "grain", "film", "texture"],
+  "engine": "ffmpeg",
+  "ffmpegFilter": "noise",
+  "params": [
+    { "key": "strength", "label": "Amount", "kind": "range", "default": 12, "min": 4, "max": 40 }
+  ],
+  "stability": "stable",
+  "description": "35mm-ish fine film grain. Adds tactile texture."
+}

@@ -1,0 +1,14 @@
+{
+  "key": "text-lower-third-basic",
+  "label": "Lower Third · Basic",
+  "category": "text",
+  "tags": ["text", "lower-third", "caption"],
+  "engine": "remotion",
+  "component": "LowerThirdBasic",
+  "params": [
+    { "key": "title", "label": "Title", "kind": "text", "default": "Name" },
+    { "key": "subtitle", "label": "Subtitle", "kind": "text", "default": "Role" },
+    { "key": "accent", "label": "Accent color", "kind": "color", "default": "#C6F24E" }
+  ],
+  "stability": "stable"
+}

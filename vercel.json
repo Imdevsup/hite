@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "pnpm tsx scripts/build-registry.ts && pnpm next build --webpack",
+  "installCommand": "pnpm install",
+  "functions": {
+    "app/api/plan/route.ts": { "maxDuration": 300 },
+    "app/api/refine/route.ts": { "maxDuration": 300 },
+    "app/api/render/route.ts": { "maxDuration": 30 },
+    "app/api/analyze/route.ts": { "maxDuration": 30 }
+  }
+}

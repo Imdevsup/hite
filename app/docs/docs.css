@@ -1,0 +1,313 @@
+/*
+  app/docs/docs.css — the documentation surface.
+
+  Scoped to `.doc`, and it deliberately reuses the landing's tokens (they are defined on `#l3d`,
+  which the docs layout also carries) so the property reads as one thing. Two columns on desktop:
+  a sticky table of contents and the prose. One column under 1000px.
+*/
+
+.doc {
+  --doc-measure: 74ch;
+  min-height: 100svh;
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
+.doc-shell {
+  width: min(1320px, 100% - 2 * clamp(20px, 5vw, 64px));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  padding: 120px 0 140px;
+  align-items: start;
+}
+@media (max-width: 999px) {
+  .doc-shell {
+    grid-template-columns: 1fr;
+    padding-top: 96px;
+  }
+}
+
+/* ── Table of contents ───────────────────────────────────────────────────────────────────── */
+.doc-toc {
+  position: sticky;
+  top: 92px;
+  max-height: calc(100svh - 120px);
+  overflow-y: auto;
+  padding-right: 8px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+@media (max-width: 999px) {
+  .doc-toc {
+    position: static;
+    max-height: none;
+    margin-bottom: 40px;
+    padding: 20px 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+.doc-toc h2 {
+  margin: 0 0 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.doc-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  counter-reset: doc-toc;
+}
+.doc-toc li a {
+  display: flex;
+  gap: 10px;
+  padding: 5px 8px;
+  margin-left: -8px;
+  border-radius: 7px;
+  color: var(--text-dim);
+  transition: color 0.2s, background 0.2s;
+}
+.doc-toc li a::before {
+  counter-increment: doc-toc;
+  content: counter(doc-toc, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding-top: 3px;
+  opacity: 0.65;
+}
+.doc-toc li a:hover,
+.doc-toc li a:focus-visible {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* ── Prose ───────────────────────────────────────────────────────────────────────────────── */
+.doc-body {
+  min-width: 0;
+}
+.doc-lede {
+  max-width: var(--doc-measure);
+  margin: 0 0 18px;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.doc h1 {
+  margin: 12px 0 0;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+.doc-section {
+  scroll-margin-top: 96px;
+  padding-top: clamp(48px, 6vw, 88px);
+}
+.doc-section > h2 {
+  margin: 0 0 6px;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.doc-section > h2 + p {
+  margin-top: 0;
+}
+.doc h3 {
+  margin: 36px 0 0;
+  font-size: 1.12rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.doc h4 {
+  margin: 26px 0 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.doc p,
+.doc li {
+  max-width: var(--doc-measure);
+  font-size: 1rem;
+  line-height: 1.62;
+  color: #c9cfdd;
+}
+.doc p {
+  margin: 14px 0 0;
+}
+.doc ul,
+.doc ol.doc-list {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+}
+.doc strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.doc a:not(.doc-toc a):not(.doc-btn) {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.doc code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e7ecf7;
+  white-space: nowrap;
+}
+.doc pre {
+  margin: 18px 0 0;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #cfd6e6;
+}
+.doc pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  white-space: pre;
+  font-size: inherit;
+}
+
+/* Callouts. */
+.doc-note {
+  margin: 20px 0 0;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--cyan);
+  background: rgba(34, 211, 238, 0.05);
+  max-width: var(--doc-measure);
+}
+.doc-note[data-kind="warn"] {
+  border-left-color: var(--amber);
+  background: rgba(245, 165, 36, 0.06);
+}
+.doc-note[data-kind="limit"] {
+  border-left-color: var(--rose);
+  background: rgba(255, 77, 125, 0.05);
+}
+.doc-note > *:first-child {
+  margin-top: 0;
+}
+.doc-note h4 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+/* Tables. */
+.doc-table-wrap {
+  margin: 20px 0 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 560px;
+}
+.doc th,
+.doc td {
+  text-align: left;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: #c9cfdd;
+}
+.doc thead th {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.025);
+}
+.doc tbody tr:last-child td {
+  border-bottom: none;
+}
+.doc td code {
+  white-space: nowrap;
+}
+
+/* The pipeline strip, reused from the landing's language. */
+.doc-flow {
+  margin: 22px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+.doc-flow span {
+  padding: 7px 11px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.doc-flow i {
+  color: var(--text-dim);
+  font-style: normal;
+}
+
+/* Header + footer chrome for the docs route. */
+.doc-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 13px clamp(20px, 4vw, 40px);
+  background: rgba(10, 12, 20, 0.72);
+  backdrop-filter: blur(18px) saturate(1.3);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  border-bottom: 1px solid var(--line);
+}
+.doc-nav-links {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.doc-nav-links a:hover,
+.doc-nav-links a:focus-visible {
+  color: var(--text);
+}
+@media (max-width: 699px) {
+  .doc-nav-links {
+    display: none;
+  }
+}

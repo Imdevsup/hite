@@ -1,0 +1,13 @@
+{
+  "key": "lut-vhs-worn",
+  "label": "VHS · Worn Tape",
+  "category": "luts",
+  "tags": ["lut", "vhs", "retro", "faded"],
+  "engine": "lut",
+  "lutFile": "/luts/vhs-worn.cube",
+  "params": [
+    { "key": "intensity", "label": "Intensity", "kind": "percent", "default": 1 }
+  ],
+  "stability": "stable",
+  "description": "Analog VHS tape color decay. Magenta cast, crushed highlights, period-correct."
+}

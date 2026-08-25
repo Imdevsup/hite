@@ -1,0 +1,13 @@
+{
+  "key": "lut-a24-moonlight",
+  "label": "A24 · Moonlight",
+  "category": "luts",
+  "tags": ["lut", "a24", "cinema", "teal"],
+  "engine": "lut",
+  "lutFile": "/luts/a24-moonlight.cube",
+  "params": [
+    { "key": "intensity", "label": "Intensity", "kind": "percent", "default": 1 }
+  ],
+  "stability": "stable",
+  "description": "Muted contrast, teal shadows, desaturated greens. A24 night-grade reference."
+}

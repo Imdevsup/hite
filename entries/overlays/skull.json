@@ -1,0 +1,13 @@
+{
+  "key": "overlay-skull",
+  "label": "Skull",
+  "category": "overlays",
+  "tags": ["overlay", "skull", "drop"],
+  "engine": "overlay-asset",
+  "overlayAsset": "/overlays/skull.webm",
+  "params": [
+    { "key": "scale", "label": "Scale", "kind": "range", "default": 1.15, "min": 0.5, "max": 3 }
+  ],
+  "stability": "stable",
+  "description": "Transparent WebM skull overlay. Use with face-tracked placement."
+}

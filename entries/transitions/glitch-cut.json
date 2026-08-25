@@ -1,0 +1,12 @@
+{
+  "key": "trans-glitch-cut",
+  "label": "Glitch Cut",
+  "category": "transitions",
+  "tags": ["transition", "glitch", "hard"],
+  "engine": "gl-transitions",
+  "params": [
+    { "key": "duration", "label": "Duration", "kind": "duration", "default": 180 },
+    { "key": "intensity", "label": "Intensity", "kind": "percent", "default": 0.85 }
+  ],
+  "stability": "stable"
+}

@@ -1,0 +1,12 @@
+{
+  "key": "overlay-scan-lines",
+  "label": "Scan Lines",
+  "category": "overlays",
+  "tags": ["overlay", "scanlines", "crt", "retro"],
+  "engine": "overlay-asset",
+  "overlayAsset": "/overlays/scan-lines.png",
+  "params": [
+    { "key": "opacity", "label": "Opacity", "kind": "percent", "default": 0.35 }
+  ],
+  "stability": "stable"
+}
