@@ -4,17 +4,19 @@
 
 [Website](https://www.tryhite.xyz) · [Docs](https://www.tryhite.xyz/docs) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
 
-![A film cut in HITE: nine shots cut to the beat, graded, with transitions, an overlay and a title, then rendered by HITE itself](docs/media/hite-demo.gif)
+https://github.com/user-attachments/assets/7eae51ab-3c7a-41ae-af89-905f223da8e8
 
 There is no black box between the prompt and the result. The model emits typed edit commands, those
 commands reduce into a versioned edit decision list, and that list compiles into the scene graph that
 renders. You can undo any of it, or ignore the prompt entirely and drag the clips yourself.
 
-The film in the middle of that clip is HITE's own export, the mp4 its worker rendered and uploaded to
-its `exports` bucket, watermark included. The title cards around it, and the editor footage in the
-[full 53-second version](public/demo/hite-demo.mp4), were assembled afterwards in ffmpeg.
+The film above ends inside HITE's editor: `this video you're watching?` is typed, five tool calls fly
+to the timeline, and the answer lands, **made in HITE.** The earlier
+[53-second demo](public/demo/hite-demo.mp4) is HITE's own export, the mp4 its worker rendered and
+uploaded to its `exports` bucket, watermark included; its title cards and editor footage were
+assembled afterwards in ffmpeg.
 
-That timeline, read out of the database rather than remembered: **21 clips** over 25.00s cut to a
+Its timeline, read out of the database rather than remembered: **21 clips** over 25.00s cut to a
 120 BPM grid, **20 transitions** across 7 kinds, **`look-a24`**, **53 effect applications** across 8
 keys, two overlays, and a `text-lower-third-basic` title. The footage is the synthetic sample this
 repo ships (`pnpm sample:take`).
