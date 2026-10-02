@@ -6,20 +6,7 @@
 
 https://github.com/user-attachments/assets/7eae51ab-3c7a-41ae-af89-905f223da8e8
 
-There is no black box between the prompt and the result. The model emits typed edit commands, those
-commands reduce into a versioned edit decision list, and that list compiles into the scene graph that
-renders. You can undo any of it, or ignore the prompt entirely and drag the clips yourself.
-
-The film above runs 96 seconds through the work of HITE's author, and its climax happens inside
-HITE's editor: `this video you're watching?` is typed, five tool calls fly to the timeline, and the
-answer lands, **made in HITE.** In the earlier [53-second demo](public/demo/hite-demo.mp4), the middle
-25 seconds are HITE's own export, the mp4 its worker rendered and uploaded to its `exports` bucket,
-watermark included; the title cards and editor footage around them were assembled afterwards in ffmpeg.
-
-That export's timeline, read out of the database rather than remembered: **21 clips** over 25.00s cut to a
-120 BPM grid, **20 transitions** across 7 kinds, **`look-a24`**, **53 effect applications** across 8
-keys, two overlays, and a `text-lower-third-basic` title. The footage is the synthetic sample this
-repo ships (`pnpm sample:take`).
+The above is hite's demo video demonstrating its capabilities
 
 ## HITE is self-hosted
 
