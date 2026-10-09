@@ -4,7 +4,7 @@
 
 [Website](https://www.tryhite.xyz) · [Docs](https://www.tryhite.xyz/docs) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](CONTRIBUTING.md)
 
-https://github.com/user-attachments/assets/7eae51ab-3c7a-41ae-af89-905f223da8e8
+https://github.com/user-attachments/assets/f6abfa39-9351-428c-ac75-4c9c3417de21
 
 The above is hite's demo video demonstrating its capabilities
 
@@ -151,7 +151,7 @@ piece of work with a clear test.
 
 ## License
 
-HITE's own source is [MIT](LICENSE).
+HITE's own code is [MIT](LICENSE); rendering uses Remotion and ffmpeg under their own licences.
 
 It bundles ffmpeg binaries via `ffmpeg-static`, which are GPL/LGPL, and GSAP, under its own licence.
 If you ship HITE commercially those terms are yours to satisfy. The third-party notice in
